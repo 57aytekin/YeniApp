@@ -6,7 +6,7 @@
     android:background="@drawable/background"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".Activity.LoginActivity">
+    tools:context=".Activity.Activity.LoginActivity">
 
     <ImageView
         android:id="@+id/imageView"
@@ -32,7 +32,8 @@
             android:layout_height="wrap_content"
             android:drawableLeft="@drawable/icon_email"
             android:ems="10"
-            android:gravity="center"
+            android:drawablePadding="10dp"
+            android:gravity="start"
             android:hint="e-mail"
             android:inputType="textEmailAddress"
             android:textColorHint="#000" />
@@ -50,10 +51,11 @@
             android:id="@+id/etLoginPassword"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:drawablePadding="10dp"
             android:layout_marginTop="10dp"
             android:drawableStart="@drawable/icon_password"
             android:ems="10"
-            android:gravity="center"
+            android:gravity="start"
             android:hint="password"
             android:inputType="textPassword"
             android:textColorHint="#000"/>
