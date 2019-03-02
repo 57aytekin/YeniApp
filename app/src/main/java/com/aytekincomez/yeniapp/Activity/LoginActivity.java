@@ -100,8 +100,9 @@ public class LoginActivity extends AppCompatActivity {
                                     JSONObject object = jsonArray.getJSONObject(i);
                                     String name = object.getString("name");
                                     String email = object.getString("email");
+                                    int id = object.getInt("id");
 
-                                    Toast.makeText(LoginActivity.this, "Giriş Başarılı Hoşgeldin: "+name, Toast.LENGTH_SHORT).show();
+                                    Toast.makeText(LoginActivity.this, "Giriş Başarılı: "+id, Toast.LENGTH_SHORT).show();
                                     startActivity(new Intent(getApplicationContext(), MainActivity.class));
                                 }
 
