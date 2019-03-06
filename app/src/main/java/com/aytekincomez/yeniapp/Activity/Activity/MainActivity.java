@@ -43,10 +43,11 @@ public class MainActivity extends AppCompatActivity {
         uiElement();
         sessionManager = new SessionManager(this);
         sessionManager.checkLogin();
-        HashMap<String, String> user = sessionManager.userDetail();
+        /*HashMap<String, String> user = sessionManager.userDetail();
         String mName = user.get(sessionManager.NAME);
         String mEmail = user.get(sessionManager.EMAIL);
-
+        String mUserid = user.get(sessionManager.USERID);
+*/
         FragmentManager fragmentManager = getSupportFragmentManager();
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
         fragmentTransaction.replace(R.id.container, new FragmentHome());

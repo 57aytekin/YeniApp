@@ -95,6 +95,7 @@ public class LoginActivity extends AppCompatActivity {
                             JSONObject jsonObject = new JSONObject(response);
                             String success = jsonObject.getString("success");
                             JSONArray jsonArray = jsonObject.getJSONArray("login");
+                            Log.d("RESPONSE",response);
 
                             if (success.equals("1")){
 
@@ -102,10 +103,11 @@ public class LoginActivity extends AppCompatActivity {
                                     JSONObject object = jsonArray.getJSONObject(i);
                                     String name = object.getString("name");
                                     String email = object.getString("email");
+                                    int id = object.getInt("id");
 
-                                    sessionManager.createSession(name, email);
+                                    sessionManager.createSession(name, email, ""+id);
 
-                                    Toast.makeText(LoginActivity.this, "Giriş Başarılı Hoşgeldin: "+name, Toast.LENGTH_SHORT).show();
+                                    Toast.makeText(LoginActivity.this, "Giriş Başarılı Hoşgeldin: "+id, Toast.LENGTH_SHORT).show();
                                     startActivity(new Intent(getApplicationContext(), MainActivity.class));
                                 }
 

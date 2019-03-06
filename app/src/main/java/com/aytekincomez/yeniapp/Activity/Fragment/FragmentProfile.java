@@ -25,9 +25,6 @@ public class FragmentProfile extends Fragment {
         View view = inflater.inflate(R.layout.layout_fragment_profile, container, false);
         sessionManager = new SessionManager(view.getContext());
         sessionManager.checkLogin();
-        HashMap<String, String> user = sessionManager.userDetail();
-        String mName = user.get(sessionManager.NAME);
-        String mEmail = user.get(sessionManager.EMAIL);
 
         tvLogout = view.findViewById(R.id.profile_logout);
         tvLogout.setOnClickListener(new View.OnClickListener() {
