@@ -4,16 +4,28 @@ public class Post {
     private int post_id;
     private int user_id;
     private String post_text;
+    private int like_count;
+    private int comment_count;
     private String tarih;
 
     public Post() {
     }
 
-    public Post(int post_id, int user_id, String post_text, String tarih) {
+    public Post(int post_id, int user_id, String post_text, int like_count, int comment_count, String tarih) {
         this.post_id = post_id;
         this.user_id = user_id;
         this.post_text = post_text;
+        this.like_count = like_count;
+        this.comment_count = comment_count;
         this.tarih = tarih;
+    }
+
+    public int getComment_count() {
+        return comment_count;
+    }
+
+    public void setComment_count(int comment_count) {
+        this.comment_count = comment_count;
     }
 
     public int getPost_id() {
@@ -22,6 +34,14 @@ public class Post {
 
     public void setPost_id(int post_id) {
         this.post_id = post_id;
+    }
+
+    public int getLike_count() {
+        return like_count;
+    }
+
+    public void setLike_count(int like_count) {
+        this.like_count = like_count;
     }
 
     public int getUser_id() {
