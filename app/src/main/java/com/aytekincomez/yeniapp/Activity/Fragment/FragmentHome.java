@@ -44,6 +44,7 @@ public class FragmentHome extends Fragment {
     RecyclerView.LayoutManager layoutManager;
     RequestQueue requestQueue;
     private static final String URL_GETPOST = "http://aytekincomez.webutu.com/yeni/getpost.php";
+    private static final String URL_USERNAME = "http://aytekincomez.webutu.com/yeni/getusername.php";
 
     @Nullable
     @Override
@@ -64,12 +65,6 @@ public class FragmentHome extends Fragment {
     }
 
     private void listele(){
-        /*postList.add(new Post(1,1,"Mustafa","Evden henüzasdasdasd yeni çıkmıştım otobüs beklerken arkadan ...",5,5,"01.01.01"));
-        postList.add(new Post(1,1,"Kemal","Sende başını alıp gitme ne olur, ne olur...",15,5,"01.01.01"));
-        postList.add(new Post(1,1,"57Noname","Bu içerik kısmı",5,5,"01.01.01"));
-        postList.add(new Post(1,1,"Ayşe","Bu içerik kısmı",5,5,"01.01.01"));
-        postList.add(new Post(1,1,"Fatma","Bu içerik kısmı",5,5,"01.01.01"));
-        */
         StringRequest stringRequest = new StringRequest(
                 Request.Method.POST,
                 URL_GETPOST,
@@ -83,20 +78,26 @@ public class FragmentHome extends Fragment {
                             for (int i=0; i<jsonArray.length(); i++){
                                 JSONObject item = jsonArray.optJSONObject(i);
 
-                                int id = Integer.parseInt(item.getString("id"));
+                                final int id = Integer.parseInt(item.getString("id"));
                                 final int user_id = Integer.parseInt(item.getString("user_id"));
-                                String share_post = item.getString("share_post");
-                                int like_count = Integer.parseInt(item.getString("like_count"));
-                                int comment_count = Integer.parseInt(item.getString("comment_count"));
-                                String tarih = item.getString("tarih");
+                                final String share_post = item.getString("share_post");
+                                final int like_count = Integer.parseInt(item.getString("like_count"));
+                                final int comment_count = Integer.parseInt(item.getString("comment_count"));
+                                final String tarih = item.getString("tarih");
 
                                 StringRequest request = new StringRequest(
                                         Request.Method.POST,
-                                        "",
+                                        URL_USERNAME,
                                         new Response.Listener<String>() {
                                             @Override
                                             public void onResponse(String response) {
-
+                                                Log.d("USER",response);
+                                                final String getUserName = response.toString();
+                                                postList.add(new Post(
+                                                        id, user_id,getUserName, share_post, like_count, comment_count, tarih
+                                                ));
+                                                PostAdapter adapter = new PostAdapter(postList);
+                                                recyclerView.setAdapter(adapter);
                                             }
                                         },
                                         new Response.ErrorListener() {
@@ -116,11 +117,6 @@ public class FragmentHome extends Fragment {
                                 };
                                 requestQueue.add(request);
 
-                                postList.add(new Post(
-                                        id, user_id, "Username", share_post, like_count, comment_count, tarih
-                                ));
-                                PostAdapter adapter = new PostAdapter(postList);
-                                recyclerView.setAdapter(adapter);
                             }
                         } catch (JSONException e) {
                             e.printStackTrace();
