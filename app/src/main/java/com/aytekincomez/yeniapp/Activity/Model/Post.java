@@ -3,6 +3,7 @@ package com.aytekincomez.yeniapp.Activity.Model;
 public class Post {
     private int post_id;
     private int user_id;
+    private String user_name;
     private String post_text;
     private int like_count;
     private int comment_count;
@@ -11,13 +12,22 @@ public class Post {
     public Post() {
     }
 
-    public Post(int post_id, int user_id, String post_text, int like_count, int comment_count, String tarih) {
+    public Post(int post_id, int user_id, String user_name, String post_text, int like_count, int comment_count, String tarih) {
         this.post_id = post_id;
         this.user_id = user_id;
+        this.user_name = user_name;
         this.post_text = post_text;
         this.like_count = like_count;
         this.comment_count = comment_count;
         this.tarih = tarih;
+    }
+
+    public String getUser_name() {
+        return user_name;
+    }
+
+    public void setUser_name(String user_name) {
+        this.user_name = user_name;
     }
 
     public int getComment_count() {

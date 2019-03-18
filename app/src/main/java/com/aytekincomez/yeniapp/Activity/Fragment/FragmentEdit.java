@@ -67,6 +67,8 @@ public class FragmentEdit extends Fragment {
         HashMap<String, String> user = sessionManager.userDetail();
         final String user_id = user.get(sessionManager.USERID);
         final String share_post = etText.getText().toString();
+        final String like_count = "0";
+        final String comment_count = "0";
 
         StringRequest stringRequest = new StringRequest(
                 Request.Method.POST,
@@ -85,6 +87,8 @@ public class FragmentEdit extends Fragment {
                                 FragmentTransaction transaction = fragmentManager.beginTransaction();
                                 transaction.replace(R.id.container, new FragmentHome());
                                 transaction.commit();
+                            }else if(success.equals("0")){
+                                Toast.makeText(context, "Sunucu tarafında hata", Toast.LENGTH_SHORT).show();
                             }
                         } catch (JSONException e) {
                             e.printStackTrace();
@@ -95,7 +99,7 @@ public class FragmentEdit extends Fragment {
                 new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError error) {
-                        Toast.makeText(context, "Hata", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(context, "Sunucu tarafında bir hata oluştu", Toast.LENGTH_SHORT).show();
                     }
                 }
         ){
@@ -104,6 +108,8 @@ public class FragmentEdit extends Fragment {
                 Map<String, String> params  = new HashMap<>();
                 params.put("user_id",user_id);
                 params.put("share_post",share_post);
+                params.put("like_count",like_count);
+                params.put("comment_count",comment_count);
                 return params;
             }
         };

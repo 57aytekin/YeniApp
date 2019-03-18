@@ -23,7 +23,7 @@
                 android:id="@+id/post_profile_image"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_margin="10dp"
+                android:layout_margin="5dp"
                 android:src="@drawable/profile_photo"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
@@ -40,19 +40,22 @@
 
             <TextView
                 android:id="@+id/post_text"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Yolda giderken arkamı döndüm ve .asdas asdasdsaadadsadasdasdaadsdad.."
+                android:layout_marginStart="30dp"
+                android:text="Evden henüzasdasdasd yeni çıkmıştım otobüs beklerken arkadan .."
                 android:textColor="#000"
                 android:textSize="18sp"
+                android:layout_marginTop="5dp"
                 app:layout_constraintLeft_toRightOf="@id/post_profile_image"
-                app:layout_constraintTop_toBottomOf="@id/post_profile_image" />
+                app:layout_constraintTop_toBottomOf="@id/post_profile_image"
+                />
 
             <TextView
                 android:id="@+id/post_like_count"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
+                android:layout_marginTop="5dp"
                 android:text="15 Beğeni"
                 app:layout_constraintLeft_toLeftOf="@id/post_profile_image"
                 app:layout_constraintTop_toBottomOf="@id/post_text" />
@@ -69,8 +72,8 @@
             <Button
                 android:id="@+id/post_btn_like"
                 android:layout_width="170dp"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
+                android:layout_height="40dp"
+                android:layout_marginTop="5dp"
                 android:background="@drawable/begen_button_bg"
                 android:drawableStart="@drawable/ic_like_24dp"
                 android:padding="10dp"
@@ -82,11 +85,11 @@
             <Button
                 android:id="@+id/post_btn_comment"
                 android:layout_width="170dp"
-                android:layout_height="wrap_content"
+                android:layout_height="40dp"
                 android:background="@drawable/begen_button_bg"
                 android:drawableStart="@drawable/ic_comment_24dp"
                 android:padding="10dp"
-                android:text="Yorum Yap"
+                android:text="Tamamla"
                 android:textAllCaps="false"
                 app:layout_constraintEnd_toEndOf="@id/post_comment_count"
                 app:layout_constraintTop_toTopOf="@id/post_btn_like" />
