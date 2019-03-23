@@ -6,6 +6,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.ToggleButton;
 
 import com.aytekincomez.yeniapp.R;
 
@@ -13,7 +14,8 @@ public class PostHolder extends RecyclerView.ViewHolder {
 
     public ImageView ivProfileImage;
     public TextView tvUserName, postText, likeCount, commentCount;
-    public Button btnLike, btnComment;
+    public Button btnComment;
+    public ToggleButton btnLike;
 
     public PostHolder(@NonNull View itemView) {
         super(itemView);

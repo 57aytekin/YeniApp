@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">YeniApp</string>
+    <string name="toggle_style"><b>Beğen</b></string>
+
 </resources>

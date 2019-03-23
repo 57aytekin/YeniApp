@@ -15,6 +15,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ToggleButton;
 
 import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
@@ -85,37 +86,7 @@ public class FragmentHome extends Fragment {
                                 final int comment_count = Integer.parseInt(item.getString("comment_count"));
                                 final String tarih = item.getString("tarih");
 
-                                StringRequest request = new StringRequest(
-                                        Request.Method.POST,
-                                        URL_USERNAME,
-                                        new Response.Listener<String>() {
-                                            @Override
-                                            public void onResponse(String response) {
-                                                Log.d("USER",response);
-                                                final String getUserName = response.toString();
-                                                postList.add(new Post(
-                                                        id, user_id,getUserName, share_post, like_count, comment_count, tarih
-                                                ));
-                                                PostAdapter adapter = new PostAdapter(postList);
-                                                recyclerView.setAdapter(adapter);
-                                            }
-                                        },
-                                        new Response.ErrorListener() {
-                                            @Override
-                                            public void onErrorResponse(VolleyError error) {
-
-                                            }
-                                        }
-                                ){
-                                    @Override
-                                    protected Map<String, String> getParams() throws AuthFailureError {
-                                        Map<String, String> params = new HashMap<>();
-                                        String userid = String.valueOf(user_id);
-                                        params.put("user_id",userid);
-                                        return params;
-                                    }
-                                };
-                                requestQueue.add(request);
+                                getUserName(id,user_id,share_post,like_count,comment_count,tarih);
 
                             }
                         } catch (JSONException e) {
@@ -136,6 +107,40 @@ public class FragmentHome extends Fragment {
             }
         };
         requestQueue.add(stringRequest);
+    }
+
+    public void getUserName(final int id, final int user_id, final String share_post, final int like_count, final int comment_count, final String tarih){
+        StringRequest request = new StringRequest(
+                Request.Method.POST,
+                URL_USERNAME,
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        Log.d("USER",response);
+                        final String getUserName = response.toString();
+                        postList.add(new Post(
+                                id, user_id,getUserName, share_post, like_count, comment_count, tarih
+                        ));
+                        PostAdapter adapter = new PostAdapter(postList);
+                        recyclerView.setAdapter(adapter);
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+
+                    }
+                }
+        ){
+            @Override
+            protected Map<String, String> getParams() throws AuthFailureError {
+                Map<String, String> params = new HashMap<>();
+                String userid = String.valueOf(user_id);
+                params.put("user_id",userid);
+                return params;
+            }
+        };
+        requestQueue.add(request);
 
     }
 

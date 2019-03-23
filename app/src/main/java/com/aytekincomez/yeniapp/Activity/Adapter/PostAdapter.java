@@ -30,16 +30,30 @@ public class PostAdapter extends RecyclerView.Adapter<PostHolder> {
     }
 
     @Override
-    public void onBindViewHolder(@NonNull PostHolder postHolder, int i) {
-        Post post = postList.get(i);
+    public void onBindViewHolder(@NonNull final PostHolder postHolder, final int i) {
+        final Post post = postList.get(i);
 
-        int like_count = post.getLike_count();
+
         int comment_count = post.getComment_count();
 
         postHolder.tvUserName.setText(post.getUser_name());
         postHolder.postText.setText(post.getPost_text());
-        postHolder.likeCount.setText(like_count+" Beğeni");
+
         postHolder.commentCount.setText(comment_count+" Yorum");
+        postHolder.likeCount.setText(post.getLike_count()+" Beğeni");
+        postHolder.btnLike.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                boolean on = postHolder.btnLike.isChecked();
+                int like_count = post.getLike_count();
+                if(on){
+                    like_count++;
+                    postHolder.likeCount.setText(like_count+" Beğeni");
+                }else{
+                    postHolder.likeCount.setText(post.getLike_count()+" Beğeni");
+                }
+            }
+        });
     }
 
     @Override
