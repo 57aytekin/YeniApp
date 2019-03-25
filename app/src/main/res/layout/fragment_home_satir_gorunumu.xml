@@ -85,12 +85,11 @@
                 android:layout_marginTop="5dp"
                 android:background="@drawable/begen_button_bg"
                 android:checked="false"
-                android:clickable="true"
                 android:drawableStart="@drawable/ic_like_24dp"
                 android:padding="10dp"
-                android:textOn="@string/toggle_style"
-                android:textOff="Beğen"
                 android:textAllCaps="false"
+                android:textOff="Beğen"
+                android:textOn="@string/toggle_style"
                 app:layout_constraintLeft_toLeftOf="@id/post_like_count"
                 app:layout_constraintTop_toBottomOf="@id/post_like_count" />
 

@@ -25,6 +25,7 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.aytekincomez.yeniapp.Activity.Adapter.PostAdapter;
+import com.aytekincomez.yeniapp.Activity.Interfaces.ClickListener;
 import com.aytekincomez.yeniapp.Activity.Model.Post;
 import com.aytekincomez.yeniapp.R;
 
@@ -37,7 +38,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class FragmentHome extends Fragment {
+public class FragmentHome extends Fragment{
     Toolbar toolbar;
     RecyclerView recyclerView;
     PostAdapter postAdapter;
@@ -50,14 +51,19 @@ public class FragmentHome extends Fragment {
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.layout_fragment_home, container, false);
+        final View view = inflater.inflate(R.layout.layout_fragment_home, container, false);
 
         postList = new ArrayList<>();
         requestQueue = Volley.newRequestQueue(view.getContext());
         listele();
 
         recyclerView = view.findViewById(R.id.recycler_home);
-        postAdapter = new PostAdapter(postList);
+        postAdapter = new PostAdapter(postList, view.getContext(), new ClickListener() {
+            @Override
+            public void onPositionClicked(int position) {
+
+            }
+        });
         layoutManager = new LinearLayoutManager(view.getContext());
         recyclerView.setLayoutManager(layoutManager);
         recyclerView.setAdapter(postAdapter);
@@ -121,7 +127,12 @@ public class FragmentHome extends Fragment {
                         postList.add(new Post(
                                 id, user_id,getUserName, share_post, like_count, comment_count, tarih
                         ));
-                        PostAdapter adapter = new PostAdapter(postList);
+                        PostAdapter adapter = new PostAdapter(postList, getView().getContext(), new ClickListener() {
+                            @Override
+                            public void onPositionClicked(int position) {
+
+                            }
+                        });
                         recyclerView.setAdapter(adapter);
                     }
                 },
@@ -143,5 +154,4 @@ public class FragmentHome extends Fragment {
         requestQueue.add(request);
 
     }
-
 }
