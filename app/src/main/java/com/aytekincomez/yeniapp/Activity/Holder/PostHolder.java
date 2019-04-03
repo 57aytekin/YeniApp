@@ -4,15 +4,13 @@ import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 import android.widget.ToggleButton;
 
-import com.aytekincomez.yeniapp.Activity.Interfaces.ClickListener;
+import com.aytekincomez.yeniapp.Activity.Adapter.ClickListener;
 import com.aytekincomez.yeniapp.R;
 
 import java.lang.ref.WeakReference;
