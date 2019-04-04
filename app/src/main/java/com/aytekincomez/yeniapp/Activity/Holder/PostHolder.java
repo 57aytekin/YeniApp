@@ -23,7 +23,6 @@ public class PostHolder extends RecyclerView.ViewHolder {
     public ToggleButton btnLike;
     private WeakReference<ClickListener> listenerRef;
     SharedPreferences sharedPreferences;
-    static int btnId;
 
     public PostHolder(@NonNull View itemView) {
         super(itemView);

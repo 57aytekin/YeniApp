@@ -11,7 +11,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.aytekincomez.yeniapp.Activity.Activity.login.LoginActivity;
-import com.aytekincomez.yeniapp.Activity.Activity.MainActivity;
+import com.aytekincomez.yeniapp.Activity.Activity.main.MainActivity;
 
 import com.aytekincomez.yeniapp.R;
 

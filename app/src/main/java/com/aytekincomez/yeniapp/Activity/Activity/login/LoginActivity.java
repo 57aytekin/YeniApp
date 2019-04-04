@@ -1,6 +1,5 @@
 package com.aytekincomez.yeniapp.Activity.Activity.login;
 
-import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -20,17 +19,15 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
-import com.aytekincomez.yeniapp.Activity.Activity.MainActivity;
+import com.aytekincomez.yeniapp.Activity.Activity.main.MainActivity;
 import com.aytekincomez.yeniapp.Activity.Activity.register.RegisterActivity;
 import com.aytekincomez.yeniapp.Activity.Manager.SessionManager;
-import com.aytekincomez.yeniapp.Activity.Model.User;
 import com.aytekincomez.yeniapp.R;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 public class LoginActivity extends AppCompatActivity{

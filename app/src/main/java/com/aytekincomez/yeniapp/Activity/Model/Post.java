@@ -1,80 +1,57 @@
 package com.aytekincomez.yeniapp.Activity.Model;
 
+import com.google.gson.annotations.Expose;
+import com.google.gson.annotations.SerializedName;
+
 public class Post {
+
+    @Expose
+    @SerializedName("id")
     private int post_id;
+    @Expose
+    @SerializedName("useri_id")
     private int user_id;
+    @Expose
+    @SerializedName("name")
     private String user_name;
+    @Expose
+    @SerializedName("share_post")
     private String post_text;
+    @Expose
+    @SerializedName("like_count")
     private int like_count;
+    @Expose
+    @SerializedName("comment_count")
     private int comment_count;
+    @Expose
+    @SerializedName("tarih")
     private String tarih;
-
-    public Post() {
-    }
-
-    public Post(int post_id, int user_id, String user_name, String post_text, int like_count, int comment_count, String tarih) {
-        this.post_id = post_id;
-        this.user_id = user_id;
-        this.user_name = user_name;
-        this.post_text = post_text;
-        this.like_count = like_count;
-        this.comment_count = comment_count;
-        this.tarih = tarih;
-    }
-
-    public String getUser_name() {
-        return user_name;
-    }
-
-    public void setUser_name(String user_name) {
-        this.user_name = user_name;
-    }
-
-    public int getComment_count() {
-        return comment_count;
-    }
-
-    public void setComment_count(int comment_count) {
-        this.comment_count = comment_count;
-    }
 
     public int getPost_id() {
         return post_id;
-    }
-
-    public void setPost_id(int post_id) {
-        this.post_id = post_id;
-    }
-
-    public int getLike_count() {
-        return like_count;
-    }
-
-    public void setLike_count(int like_count) {
-        this.like_count = like_count;
     }
 
     public int getUser_id() {
         return user_id;
     }
 
-    public void setUser_id(int user_id) {
-        this.user_id = user_id;
+    public String getUser_name() {
+        return user_name;
     }
 
     public String getPost_text() {
         return post_text;
     }
 
-    public void setPost_text(String post_text) {
-        this.post_text = post_text;
+    public int getLike_count() {
+        return like_count;
+    }
+
+    public int getComment_count() {
+        return comment_count;
     }
 
     public String getTarih() {
         return tarih;
-    }
-
-    public void setTarih(String tarih) {
-        this.tarih = tarih;
     }
 }

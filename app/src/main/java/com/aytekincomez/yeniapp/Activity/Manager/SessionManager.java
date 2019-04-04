@@ -5,7 +5,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 
 import com.aytekincomez.yeniapp.Activity.Activity.login.LoginActivity;
-import com.aytekincomez.yeniapp.Activity.Activity.MainActivity;
+import com.aytekincomez.yeniapp.Activity.Activity.main.MainActivity;
 
 import java.util.HashMap;
 

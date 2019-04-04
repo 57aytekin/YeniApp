@@ -1,4 +1,4 @@
-package com.aytekincomez.yeniapp.Activity.Activity;
+package com.aytekincomez.yeniapp.Activity.Activity.main;
 
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
@@ -7,17 +7,14 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
-import android.view.View;
 
 import com.aytekincomez.yeniapp.Activity.Fragment.FragmentEdit;
-import com.aytekincomez.yeniapp.Activity.Fragment.FragmentHome;
+import com.aytekincomez.yeniapp.Activity.Fragment.home.FragmentHome;
 import com.aytekincomez.yeniapp.Activity.Fragment.FragmentLikes;
 import com.aytekincomez.yeniapp.Activity.Fragment.FragmentMessage;
 import com.aytekincomez.yeniapp.Activity.Fragment.FragmentProfile;
 import com.aytekincomez.yeniapp.Activity.Manager.SessionManager;
 import com.aytekincomez.yeniapp.R;
-
-import java.util.HashMap;
 
 
 public class MainActivity extends AppCompatActivity {
@@ -34,26 +31,19 @@ public class MainActivity extends AppCompatActivity {
         uiElement();
         sessionManager = new SessionManager(this);
         sessionManager.checkLogin();
-        /*HashMap<String, String> user = sessionManager.userDetail();
-        String mName = user.get(sessionManager.NAME);
-        String mEmail = user.get(sessionManager.EMAIL);
-        String mUserid = user.get(sessionManager.USERID);
-*/
+
         FragmentManager fragmentManager = getSupportFragmentManager();
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
         fragmentTransaction.replace(R.id.container, new FragmentHome());
         fragmentTransaction.commit();
 
         tabSeleceted();
-        fabEdit.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                FragmentManager fm1 = getSupportFragmentManager();
-                FragmentTransaction ft1 = fm1.beginTransaction();
-                fragment = new FragmentEdit();
-                ft1.replace(R.id.container, fragment);
-                ft1.commit();
-            }
+        fabEdit.setOnClickListener(v -> {
+            FragmentManager fm1 = getSupportFragmentManager();
+            FragmentTransaction ft1 = fm1.beginTransaction();
+            fragment = new FragmentEdit();
+            ft1.replace(R.id.container, fragment);
+            ft1.commit();
         });
 
 

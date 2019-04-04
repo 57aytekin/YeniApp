@@ -1,5 +1,6 @@
 package com.aytekincomez.yeniapp.Activity.api;
 
+import com.aytekincomez.yeniapp.Activity.Model.Post;
 import com.aytekincomez.yeniapp.Activity.Model.User;
 
 import java.util.List;
@@ -19,5 +20,8 @@ public interface ApiInterface {
         @Field("email") String email,
         @Field("password") String password
     );
+
+    @GET("getpost.php")
+    Call<List<Post>> getPost();
 
 }

@@ -27,18 +27,16 @@ import java.util.Map;
 
 public class PostAdapter extends RecyclerView.Adapter<PostHolder> {
     private List<Post> postList;
-    private final ClickListener listener;
     private final static String likeUpdateURL = "http://aytekincomez.webutu.com/yeni/update_like_count.php";
     SharedPreferences sharedPreferences;
     SharedPreferences.Editor editor;
     Context context;
-    private WeakReference<ClickListener> listenerRef;
 
 
-    public PostAdapter(List<Post> postList, Context context, ClickListener listener) {
+
+    public PostAdapter(List<Post> postList, Context context) {
         this.postList = postList;
         this.context = context;
-        this.listener = listener;
     }
 
     @NonNull
