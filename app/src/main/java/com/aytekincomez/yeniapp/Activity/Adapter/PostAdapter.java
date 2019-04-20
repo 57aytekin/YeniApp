@@ -1,8 +1,11 @@
 package com.aytekincomez.yeniapp.Activity.Adapter;
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.support.annotation.NonNull;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -12,39 +15,46 @@ import android.widget.CompoundButton;
 import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
-import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
+import com.aytekincomez.yeniapp.Activity.Activity.comment.CommentActivity;
+import com.aytekincomez.yeniapp.Activity.Fragment.home.FragmenHomeView;
+import com.aytekincomez.yeniapp.Activity.Fragment.home.FragmentHomePresenter;
 import com.aytekincomez.yeniapp.Activity.Holder.PostHolder;
 import com.aytekincomez.yeniapp.Activity.Model.Post;
+import com.aytekincomez.yeniapp.Activity.api.ApiClient;
+import com.aytekincomez.yeniapp.Activity.api.ApiInterface;
 import com.aytekincomez.yeniapp.R;
 
 import java.lang.ref.WeakReference;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class PostAdapter extends RecyclerView.Adapter<PostHolder> {
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+
+public class PostAdapter extends RecyclerView.Adapter<PostHolder>{
     private List<Post> postList;
-    private final static String likeUpdateURL = "http://aytekincomez.webutu.com/yeni/update_like_count.php";
-    SharedPreferences sharedPreferences;
-    SharedPreferences.Editor editor;
-    Context context;
+    private Context context;
+    private ItemClickListener itemClickListener;
 
-
-
-    public PostAdapter(List<Post> postList, Context context) {
+    public PostAdapter(List<Post> postList, Context context, ItemClickListener itemClickListener) {
         this.postList = postList;
         this.context = context;
+        this.itemClickListener = itemClickListener;
     }
 
     @NonNull
     @Override
     public PostHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
         View itemView = LayoutInflater
-                .from(viewGroup.getContext()).inflate(R.layout.fragment_home_satir_gorunumu, null);
-        PostHolder holder = new PostHolder(itemView);
+                .from(viewGroup.getContext()).inflate(R.layout.fragment_home_satir_gorunumu, viewGroup, false);
+
+        PostHolder holder = new PostHolder(itemView, itemClickListener);
 
         return holder;
     }
@@ -53,14 +63,37 @@ public class PostAdapter extends RecyclerView.Adapter<PostHolder> {
     public void onBindViewHolder(@NonNull final PostHolder postHolder, final int position) {
         final Post post = postList.get(position);
 
-        int comment_count = post.getComment_count();
+        postHolder.btnLike.setOnCheckedChangeListener(null);
 
         postHolder.tvUserName.setText(post.getUser_name());
         postHolder.postText.setText(post.getPost_text());
         postHolder.postTarih.setText(post.getTarih());
+        postHolder.btnComment.setOnClickListener(v -> {
+            Intent i = new Intent(context.getApplicationContext(), CommentActivity.class);
+            String user_id =String.valueOf(post.getUser_id());
+            String post_id = String.valueOf(post.getPost_id());
+            String user_name = post.getUser_name();
+            i.putExtra("user_id",user_id);
+            i.putExtra("post_id",post_id);
+            i.putExtra("user_name",user_name);
+            context.startActivity(i);
+        });
 
+        int comment_count = post.getComment_count();
         postHolder.commentCount.setText(comment_count+" Yorum");
-        postHolder.likeCount.setText(post.getLike_count()+" Beğeni");
+        postHolder.commentCount.setOnClickListener(v -> {
+            Intent intent = new Intent(context.getApplicationContext(), CommentActivity.class);
+            String user_id =String.valueOf(post.getUser_id());
+            String post_id = String.valueOf(post.getPost_id());
+            String user_name = post.getUser_name();
+            intent.putExtra("user_id",user_id);
+            intent.putExtra("post_id",post_id);
+            intent.putExtra("user_name",user_name);
+            context.startActivity(intent);
+        });
+
+        int like_counts = post.getLike_count();
+        postHolder.likeCount.setText(like_counts+" Beğeni");
 
         SharedPreferences sharedPrefs = context.getSharedPreferences("lol", Context.MODE_PRIVATE);
         Boolean a = sharedPrefs.getBoolean("abc"+position , false);
@@ -71,27 +104,31 @@ public class PostAdapter extends RecyclerView.Adapter<PostHolder> {
         }
 
 
-        postHolder.btnLike.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                int like_count = post.getLike_count();
+        postHolder.btnLike.setOnCheckedChangeListener((buttonView, isChecked) -> {
+            int like_count = post.getLike_count();
 
-                if(isChecked){
-                    SharedPreferences.Editor editor = context.getSharedPreferences("lol", Context.MODE_PRIVATE).edit();
-                    like_count++;
-                    editor.putBoolean("abc"+position, true);
-                    editor.commit();
-                }else{
-                    SharedPreferences.Editor editor = context.getSharedPreferences("lol", Context.MODE_PRIVATE).edit();
-                    like_count--;
-                    editor.putBoolean("abc"+position, false);
-                    editor.commit();
-                }
+            if(isChecked){
+                SharedPreferences.Editor editor = context.getSharedPreferences("lol", Context.MODE_PRIVATE).edit();
+                editor.putBoolean("abc"+position, true);
+                editor.apply();
+
+                like_count ++;
                 String likeC = String.valueOf(like_count);
                 String post_id = String.valueOf(post.getPost_id());
                 postHolder.likeCount.setText(like_count+" Beğeni");
-                updateLikeCount(post_id,likeC, context);
+                updateLikeCount(post_id,likeC);
+
+            }else{
+                SharedPreferences.Editor editor = context.getSharedPreferences("lol", Context.MODE_PRIVATE).edit();
+                editor.putBoolean("abc"+position, false);
+                editor.apply();
+
+                String likeC = String.valueOf(like_count);
+                String post_id = String.valueOf(post.getPost_id());
+                postHolder.likeCount.setText(like_count+" Beğeni");
+                updateLikeCount(post_id,likeC);
             }
+
         });
 
     }
@@ -101,32 +138,26 @@ public class PostAdapter extends RecyclerView.Adapter<PostHolder> {
         return postList.size();
     }
 
-    public void updateLikeCount(final String post_id, final String likeC, Context getContext){
-        StringRequest stringRequest = new StringRequest(
-                Request.Method.POST,
-                likeUpdateURL,
-                new Response.Listener<String>() {
-                    @Override
-                    public void onResponse(String response) {
-
-                    }
-                },
-                new Response.ErrorListener() {
-                    @Override
-                    public void onErrorResponse(VolleyError error) {
-
-                    }
-                }
-        ){
+    private void updateLikeCount(final String post_id, final String likeC){
+        ApiInterface apiInterface = ApiClient.getApiClient().create(ApiInterface.class);
+        Call<Post> call = apiInterface.updateLikeCount(likeC, post_id);
+        call.enqueue(new Callback<Post>() {
             @Override
-            protected Map<String, String> getParams() throws AuthFailureError {
-                Map<String, String> params = new HashMap<>();
-                params.put("like_count",likeC);
-                params.put("post_id",post_id);
-                return params;
+            public void onResponse(Call<Post> call, Response<Post> response) {
+
             }
-        };
-        RequestQueue queue = Volley.newRequestQueue(getContext);
-        queue.add(stringRequest);
+
+            @Override
+            public void onFailure(Call<Post> call, Throwable t) {
+
+            }
+        });
+    }
+
+
+
+
+    public interface ItemClickListener{
+        void onItemClick(View view, int position);
     }
 }

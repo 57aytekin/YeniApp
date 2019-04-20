@@ -47,24 +47,21 @@ public class LoginActivity extends AppCompatActivity{
         uiElement();
         sessionManager = new SessionManager(this);
 
-        btnSignIn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                String email = etEmail.getText().toString().trim();
-                String pass = etPassword.getText().toString().trim();
+        btnSignIn.setOnClickListener(v -> {
+            String email = etEmail.getText().toString().trim();
+            String pass = etPassword.getText().toString().trim();
 
 
-                if (email.isEmpty()){
-                    etEmail.setError("Email adresinizi giriniz");
+            if (email.isEmpty()){
+                etEmail.setError("Email adresinizi giriniz");
 
-                }else if (pass.isEmpty()){
-                    etPassword.setError("Şifrenizi giriniz");
-                }else{
-                    login(email, pass);
-                    loading.setVisibility(View.VISIBLE);
-                    btnSignIn.setVisibility(View.GONE);
-                    tvRegister.setVisibility(View.GONE);
-                }
+            }else if (pass.isEmpty()){
+                etPassword.setError("Şifrenizi giriniz");
+            }else{
+                login(email, pass);
+                loading.setVisibility(View.VISIBLE);
+                btnSignIn.setVisibility(View.GONE);
+                tvRegister.setVisibility(View.GONE);
             }
         });
 

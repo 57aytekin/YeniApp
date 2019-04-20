@@ -18,7 +18,7 @@ public class FragmentHomePresenter {
         this.view = view;
     }
 
-    void getPost(){
+    public void getPost(){
         view.showLoading();
 
         ApiInterface apiInterface = ApiClient.getApiClient().create(ApiInterface.class);
