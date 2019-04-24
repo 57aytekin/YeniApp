@@ -7,10 +7,14 @@ import android.support.annotation.NonNull;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.RecyclerView;
+import android.text.format.DateUtils;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CompoundButton;
+import android.widget.TextView;
+import android.widget.Toast;
 
 import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
@@ -28,7 +32,10 @@ import com.aytekincomez.yeniapp.Activity.api.ApiInterface;
 import com.aytekincomez.yeniapp.R;
 
 import java.lang.ref.WeakReference;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -67,7 +74,14 @@ public class PostAdapter extends RecyclerView.Adapter<PostHolder>{
 
         postHolder.tvUserName.setText(post.getUser_name());
         postHolder.postText.setText(post.getPost_text());
-        postHolder.postTarih.setText(post.getTarih());
+
+
+        //Veritabanından gelen tarih ile güncel tarihi çıkararak aradaki farkı buluyoruz
+        String tarih = post.getTarih();
+        tarihFarkiHesapla(tarih, postHolder.postTarih);
+
+
+        //Yorum yap butonuna tıklayonca CommentActiviye geçiyor ve değerler intenle aktarılıyor.
         postHolder.btnComment.setOnClickListener(v -> {
             Intent i = new Intent(context.getApplicationContext(), CommentActivity.class);
             String user_id =String.valueOf(post.getUser_id());
@@ -78,6 +92,7 @@ public class PostAdapter extends RecyclerView.Adapter<PostHolder>{
             i.putExtra("user_name",user_name);
             context.startActivity(i);
         });
+
 
         int comment_count = post.getComment_count();
         postHolder.commentCount.setText(comment_count+" Yorum");
@@ -118,6 +133,7 @@ public class PostAdapter extends RecyclerView.Adapter<PostHolder>{
                 postHolder.likeCount.setText(like_count+" Beğeni");
                 updateLikeCount(post_id,likeC);
 
+
             }else{
                 SharedPreferences.Editor editor = context.getSharedPreferences("lol", Context.MODE_PRIVATE).edit();
                 editor.putBoolean("abc"+position, false);
@@ -154,8 +170,37 @@ public class PostAdapter extends RecyclerView.Adapter<PostHolder>{
         });
     }
 
+    public void tarihFarkiHesapla(String tarih, TextView tv){
 
+        SimpleDateFormat bicim = new SimpleDateFormat("dd.M.yyyy hh:mm:ss");
 
+        try {
+            Date date1 = bicim.parse(tarih);
+            Date bugun = new Date();
+            bicim.format(bugun);
+            long difference = Math.abs(date1.getTime() - bugun.getTime());
+            long dakika = difference / (1000*60);
+            long saat = difference / (1000*60*60);
+            long gun = difference / (1000*60*60*24);
+
+            Long l = new Long(gun);
+            int ay = l.intValue() /30;
+
+            if(dakika == 0){
+                tv.setText("Az önce");
+            }else if(ay == 0 && gun==0 && saat == 0){
+                tv.setText(dakika+" dk önce");
+            }else if(ay == 0 && gun == 0){
+                tv.setText(saat+ " saat önce");
+            }else if(ay == 0){
+                tv.setText(gun+" gün önce");
+            }else {
+                tv.setText(ay+" ay önce");
+            }
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+    }
 
     public interface ItemClickListener{
         void onItemClick(View view, int position);

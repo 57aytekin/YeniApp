@@ -12,6 +12,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.aytekincomez.yeniapp.Activity.Adapter.CommentAdapter;
@@ -26,9 +27,11 @@ import java.util.List;
 public class CommentActivity extends AppCompatActivity implements CommentView {
     RecyclerView recyclerView;
     EditText etCommnet;
+    TextView tvBosComment;
     Button btnSend;
     SwipeRefreshLayout swipeRefreshLayout;
     SessionManager sessionManager;
+    String post_username;
 
     CommentAdapter adapter;
     List<Comment> commentList ;
@@ -48,28 +51,29 @@ public class CommentActivity extends AppCompatActivity implements CommentView {
         getSupportActionBar().setHomeAsUpIndicator(backArrow);
 
         String postidd = getIntent().getExtras().getString("post_id");
+        post_username = getIntent().getExtras().getString("user_name");
         int int_post_id = Integer.parseInt(postidd);
 
         presenter.getComment(int_post_id);
-        presenter.updateCommentCount(postidd,"5");
 
         swipeRefreshLayout.setOnRefreshListener(() -> {
             presenter.getComment(int_post_id);
         });
 
+
+
         btnSend.setOnClickListener(v -> {
             String comment = etCommnet.getText().toString().trim();
             HashMap<String, String> map = sessionManager.userDetail();
-            String user_name = map.get(sessionManager.NAME);
+            String user_id = map.get(sessionManager.USERID);
 
-            String commentWname = user_name+"-/-"+comment;
             if(comment.isEmpty()){
                 etCommnet.setError("Lütfen yorumunuzu giriniz");
             }else {
-                presenter.saveComment(int_post_id,commentWname,0);
+                presenter.saveComment(Integer.parseInt(user_id),int_post_id,comment,0);
                 etCommnet.setText("");
                 presenter.getComment(int_post_id);
-                presenter.updateCommentCount(postidd,"5");
+                //presenter.updateCommentCount(postidd,"5");
             }
         });
 
@@ -83,6 +87,7 @@ public class CommentActivity extends AppCompatActivity implements CommentView {
 
         etCommnet = findViewById(R.id.etCommentMessage);
         btnSend = findViewById(R.id.btnSend);
+        tvBosComment = findViewById(R.id.tvBosComment);
         presenter = new CommentPresenter(this);
         progressDialog = new ProgressDialog(this);
         progressDialog.setMessage("Lütfen Bekleyim");
@@ -132,7 +137,7 @@ public class CommentActivity extends AppCompatActivity implements CommentView {
     @Override
     public void onGetResult(List<Comment> list) {
         commentList = new ArrayList<>();
-        adapter = new CommentAdapter(getApplicationContext(), list);
+        adapter = new CommentAdapter(getApplicationContext(), list, post_username);
         recyclerView.setAdapter(adapter);
         adapter.notifyDataSetChanged();
 

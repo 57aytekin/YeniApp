@@ -25,9 +25,10 @@ public interface ApiInterface {
     @FormUrlEncoded
     @POST("save_comment.php")
     Call<Comment> saveComment(
-      @Field("post_id") int post_id,
-      @Field("comment") String comment,
-      @Field("begeniDurum") int begeniDurum
+        @Field("user_id") int user_id,
+        @Field("post_id") int post_id,
+        @Field("comment") String comment,
+        @Field("begeniDurum") int begeniDurum
     );
 
     @FormUrlEncoded
@@ -35,6 +36,13 @@ public interface ApiInterface {
     Call<Post> updateLikeCount(
       @Field("like_count") String like_count,
       @Field("post_id") String post_id
+    );
+
+    @FormUrlEncoded
+    @POST("update_comment_like.php")
+    Call<Void> update_comment_like(
+            @Field("comment_id") int comment_id,
+            @Field("begeniDurum") int begeniDurum
     );
 
     @FormUrlEncoded

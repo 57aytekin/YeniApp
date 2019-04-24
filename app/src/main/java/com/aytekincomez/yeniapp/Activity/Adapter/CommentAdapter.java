@@ -4,31 +4,39 @@ import android.content.Context;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.text.Html;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.CompoundButton;
 import android.widget.TextView;
+import android.widget.Toast;
 import android.widget.ToggleButton;
 
 import com.aytekincomez.yeniapp.Activity.Manager.SessionManager;
 import com.aytekincomez.yeniapp.Activity.Model.Comment;
+import com.aytekincomez.yeniapp.Activity.api.ApiClient;
+import com.aytekincomez.yeniapp.Activity.api.ApiInterface;
 import com.aytekincomez.yeniapp.R;
 
-import java.util.ArrayList;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 
 import de.hdodenhof.circleimageview.CircleImageView;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.MyViewHolder> {
     private List<Comment> comments;
     private Context context;
+    private String post_username;
 
-    public CommentAdapter(Context context, List<Comment> comments){
+    public CommentAdapter(Context context, List<Comment> comments, String post_username){
         this.comments = comments;
         this.context = context;
+        this.post_username = post_username;
     }
 
     @NonNull
@@ -44,7 +52,7 @@ public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.MyViewHo
         HashMap<String, String> user = sessionManager.userDetail();
         String user_name = user.get(sessionManager.NAME);
 
-        if((comments.get(i).getName()).equals(user_name)){
+        if(!(comments.get(i).getName()).equals(user_name)){
             myViewHolder.btnLike.setVisibility(View.VISIBLE);
             if (comments.get(i).getBegeniDurum() == 1){
                 myViewHolder.btnLike.setBackgroundResource(R.drawable.ic_favorite_orange);
@@ -61,23 +69,27 @@ public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.MyViewHo
         myViewHolder.btnLike.setOnCheckedChangeListener((buttonView, isChecked) -> {
             if(isChecked){
                 myViewHolder.btnLike.setBackgroundResource(R.drawable.ic_favorite_orange);
-                comments.get(i).setBegeniDurum(1);
+                updateCommentLike(comments.get(i).getId(), 1);
+
             }else{
                 myViewHolder.btnLike.setBackgroundResource(R.drawable.ic_favorite_black_24dp);
-                comments.get(i).setBegeniDurum(0);
+                updateCommentLike(comments.get(i).getId(), 0);
             }
         });
 
-        String commentNname = comments.get(i).getComment();
-        String[] dizi = commentNname.split("-/-");
-        String name = dizi[0];
-        if(name.equals(user_name)){
+        String commentUserName = comments.get(i).getName();
+        String comment = comments.get(i).getComment();
+
+        if(post_username.equals(comments.get(i).getName())){
             myViewHolder.btnLike.setVisibility(View.GONE);
         }
-        String comment = dizi[1];
-        String bold = "<b>"+name+"</b>"+" "+comment;
+        String bold = "<b>"+commentUserName+"</b>"+" "+comment;
         myViewHolder.tvCommnet.setText(Html.fromHtml(bold));
-        myViewHolder.tvTarih.setText(comments.get(i).getTarih());
+
+        //Veritabanından gelen tarih ile güncel tarihi çıkararak aradaki farkı buluyoruz
+        String tarih = comments.get(i).getTarih();
+        tarihFarkiHesapla(tarih, myViewHolder.tvTarih);
+
     }
 
     @Override
@@ -98,4 +110,53 @@ public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.MyViewHo
             tvTarih = itemView.findViewById(R.id.tv_comment_tarih);
         }
     }
+
+    public void tarihFarkiHesapla(String tarih, TextView tv){
+
+        SimpleDateFormat bicim = new SimpleDateFormat("dd.M.yyyy hh:mm:ss");
+
+        try {
+            Date date1 = bicim.parse(tarih);
+            Date bugun = new Date();
+            bicim.format(bugun);
+            long difference = Math.abs(date1.getTime() - bugun.getTime());
+            long dakika = difference / (1000*60);
+            long saat = difference / (1000*60*60);
+            long gun = difference / (1000*60*60*24);
+
+            Long l = new Long(gun);
+            int ay = l.intValue() /30;
+
+            if(dakika == 0){
+                tv.setText("Az önce");
+            }else if(ay == 0 && gun==0 && saat == 0){
+                tv.setText(dakika+" dk önce");
+            }else if(ay == 0 && gun == 0){
+                tv.setText(saat+ " saat önce");
+            }else if(ay == 0){
+                tv.setText(gun+" gün önce");
+            }else {
+                tv.setText(ay+" ay önce");
+            }
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void updateCommentLike(int comment_id, int begeniDurum){
+        ApiInterface apiInterface = ApiClient.getApiClient().create(ApiInterface.class);
+        Call<Void> call = apiInterface.update_comment_like(comment_id, begeniDurum);
+        call.enqueue(new Callback<Void>() {
+            @Override
+            public void onResponse(Call<Void> call, Response<Void> response) {
+                Toast.makeText(context, ""+response.message(), Toast.LENGTH_SHORT).show();
+            }
+
+            @Override
+            public void onFailure(Call<Void> call, Throwable t) {
+                Toast.makeText(context, ""+t.getLocalizedMessage(), Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+
 }

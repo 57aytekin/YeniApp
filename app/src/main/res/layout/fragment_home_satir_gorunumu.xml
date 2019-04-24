@@ -1,115 +1,102 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.constraint.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="#DEDEDE"
     android:paddingLeft="5dp"
     android:paddingRight="5dp"
     android:paddingBottom="5dp">
 
-    <android.support.v7.widget.CardView
-        android:id="@+id/cardItem"
-        android:layout_width="match_parent"
+
+    <de.hdodenhof.circleimageview.CircleImageView
+        android:id="@+id/post_profile_image"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        app:cardCornerRadius="5dp">
+        android:layout_margin="5dp"
+        android:src="@drawable/profile_photo"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
-        <android.support.constraint.ConstraintLayout
-            android:layout_marginBottom="5dp"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+    <TextView
+        android:id="@+id/post_username"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="10dp"
+        android:textColor="#181515"
+        android:textSize="18sp"
+        android:text="Username5757"
+        app:layout_constraintStart_toEndOf="@id/post_profile_image"
+        app:layout_constraintTop_toTopOf="@id/post_profile_image" />
 
-            <de.hdodenhof.circleimageview.CircleImageView
-                android:id="@+id/post_profile_image"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_margin="5dp"
-                android:src="@drawable/profile_photo"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
+    <TextView
+        android:id="@+id/post_tarih"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="1dp"
+        android:text="10 dk önce"
+        app:layout_constraintStart_toStartOf="@id/post_username"
+        app:layout_constraintTop_toBottomOf="@id/post_username"/>
 
-            <TextView
-                android:id="@+id/post_username"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="10dp"
-                android:textSize="18sp"
-                android:text="Username5757"
-                app:layout_constraintStart_toEndOf="@id/post_profile_image"
-                app:layout_constraintTop_toTopOf="@id/post_profile_image" />
+    <TextView
+        android:id="@+id/post_text"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="30dp"
+        android:text="Evden henüzasdasdasd yeni çıkmıştım otobüs beklerken arkadan .."
+        android:textColor="#000"
+        android:textSize="16sp"
+        android:layout_marginTop="10dp"
+        app:layout_constraintStart_toStartOf="@id/post_profile_image"
+        app:layout_constraintTop_toBottomOf="@id/post_profile_image"
+        app:layout_constraintEnd_toEndOf="@id/post_comment_count"
+        />
 
-            <TextView
-                android:id="@+id/post_tarih"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="1dp"
-                android:text="10 dk önce"
-                app:layout_constraintStart_toStartOf="@id/post_username"
-                app:layout_constraintTop_toBottomOf="@id/post_username"/>
+    <TextView
+        android:id="@+id/post_like_count"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="5dp"
+        android:text="15 Beğeni"
+        app:layout_constraintLeft_toLeftOf="@id/post_profile_image"
+        app:layout_constraintTop_toBottomOf="@id/post_text" />
 
-            <TextView
-                android:id="@+id/post_text"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="30dp"
-                android:text="Evden henüzasdasdasd yeni çıkmıştım otobüs beklerken arkadan .."
-                android:textColor="#000"
-                android:textSize="18sp"
-                android:layout_marginTop="10dp"
-                app:layout_constraintLeft_toRightOf="@id/post_profile_image"
-                app:layout_constraintTop_toBottomOf="@id/post_profile_image"
-                />
+    <TextView
+        android:id="@+id/post_comment_count"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="10dp"
+        android:text="10 Yorum"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="@id/post_like_count" />
 
-            <TextView
-                android:id="@+id/post_like_count"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="5dp"
-                android:text="15 Beğeni"
-                app:layout_constraintLeft_toLeftOf="@id/post_profile_image"
-                app:layout_constraintTop_toBottomOf="@id/post_text" />
+    <ToggleButton
+        android:id="@+id/post_btn_like"
+        android:layout_width="150dp"
+        android:layout_height="40dp"
+        android:layout_marginTop="5dp"
+        android:background="@drawable/begen_button_bg"
+        android:checked="false"
+        android:drawableStart="@drawable/ic_like_24dp"
+        android:padding="10dp"
+        android:textAllCaps="false"
+        android:textOff="Beğen"
+        android:textOn="@string/toggle_style"
+        app:layout_constraintLeft_toLeftOf="@id/post_like_count"
+        app:layout_constraintTop_toBottomOf="@id/post_like_count" />
 
-            <TextView
-                android:id="@+id/post_comment_count"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginEnd="10dp"
-                android:text="10 Yorum"
-                app:layout_constraintRight_toRightOf="parent"
-                app:layout_constraintTop_toTopOf="@id/post_like_count" />
-
-            <ToggleButton
-                android:id="@+id/post_btn_like"
-                android:layout_width="150dp"
-                android:layout_height="40dp"
-                android:layout_marginTop="5dp"
-                android:background="@drawable/begen_button_bg"
-                android:checked="false"
-                android:drawableStart="@drawable/ic_like_24dp"
-                android:padding="10dp"
-                android:textAllCaps="false"
-                android:textOff="Beğen"
-                android:textOn="@string/toggle_style"
-                app:layout_constraintLeft_toLeftOf="@id/post_like_count"
-                app:layout_constraintTop_toBottomOf="@id/post_like_count" />
-
-            <Button
-                android:id="@+id/post_btn_comment"
-                android:layout_width="150dp"
-                android:layout_height="40dp"
-                android:background="@drawable/begen_button_bg"
-                android:drawableStart="@drawable/ic_comment_24dp"
-                android:padding="10dp"
-                android:text="Tamamla"
-                android:textAllCaps="false"
-                app:layout_constraintEnd_toEndOf="@id/post_comment_count"
-                app:layout_constraintTop_toTopOf="@id/post_btn_like" />
+    <Button
+        android:id="@+id/post_btn_comment"
+        android:layout_width="150dp"
+        android:layout_height="40dp"
+        android:background="@drawable/begen_button_bg"
+        android:drawableStart="@drawable/ic_comment_24dp"
+        android:padding="10dp"
+        android:text="Tamamla"
+        android:textAllCaps="false"
+        app:layout_constraintEnd_toEndOf="@id/post_comment_count"
+        app:layout_constraintTop_toTopOf="@id/post_btn_like" />
 
 
-        </android.support.constraint.ConstraintLayout>
-
-    </android.support.v7.widget.CardView>
-
-
-</RelativeLayout>
+</android.support.constraint.ConstraintLayout>

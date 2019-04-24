@@ -1,9 +1,5 @@
 package com.aytekincomez.yeniapp.Activity.Activity.comment;
 
-
-import android.util.Log;
-import android.widget.Toast;
-
 import com.aytekincomez.yeniapp.Activity.Model.Comment;
 import com.aytekincomez.yeniapp.Activity.Model.Post;
 import com.aytekincomez.yeniapp.Activity.api.ApiClient;
@@ -26,10 +22,10 @@ class CommentPresenter {
         this.view = view;
     }
 
-    void saveComment(int post_id, String comment, int begeniDurum){
+    void saveComment(int user_id, int post_id, String comment, int begeniDurum){
         view.showProgress();
         ApiInterface apiInterface = ApiClient.getApiClient().create(ApiInterface.class);
-        Call<Comment> call = apiInterface.saveComment(post_id, comment, begeniDurum);
+        Call<Comment> call = apiInterface.saveComment(user_id, post_id, comment, begeniDurum);
         call.enqueue(new Callback<Comment>() {
             @Override
             public void onResponse(Call<Comment> call, Response<Comment> response) {
@@ -71,8 +67,8 @@ class CommentPresenter {
                             view.onGetResult(comments);
                         }
                     }
-                    /*int yorumSayisi = comments.size();
-                    Log.d("YORUM",""+yorumSayisi);*/
+                    int yorumSayisi = comments.size();
+                    updateCommentCount(String.valueOf(post_id),String.valueOf(yorumSayisi));
                 }
             }
 
@@ -84,9 +80,9 @@ class CommentPresenter {
         });
     }
 
-    void updateCommentCount(String post_id, String comment_count){
+    private void updateCommentCount(final String post_id, final String commentC){
         ApiInterface apiInterface = ApiClient.getApiClient().create(ApiInterface.class);
-        Call<Post> call = apiInterface.updateCommentCount(comment_count, post_id);
+        Call<Post> call = apiInterface.updateCommentCount(commentC, post_id);
         call.enqueue(new Callback<Post>() {
             @Override
             public void onResponse(Call<Post> call, Response<Post> response) {
@@ -98,6 +94,6 @@ class CommentPresenter {
 
             }
         });
-
     }
+
 }
