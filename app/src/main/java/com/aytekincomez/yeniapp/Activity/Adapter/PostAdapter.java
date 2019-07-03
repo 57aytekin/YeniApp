@@ -3,48 +3,32 @@ package com.aytekincomez.yeniapp.Activity.Adapter;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.FragmentManager;
-import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.RecyclerView;
-import android.text.format.DateUtils;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.CompoundButton;
 import android.widget.TextView;
-import android.widget.Toast;
-
-import com.android.volley.AuthFailureError;
-import com.android.volley.Request;
-import com.android.volley.RequestQueue;
-import com.android.volley.VolleyError;
-import com.android.volley.toolbox.StringRequest;
-import com.android.volley.toolbox.Volley;
 import com.aytekincomez.yeniapp.Activity.Activity.comment.CommentActivity;
-import com.aytekincomez.yeniapp.Activity.Fragment.home.FragmenHomeView;
-import com.aytekincomez.yeniapp.Activity.Fragment.home.FragmentHomePresenter;
+import com.aytekincomez.yeniapp.Activity.Fragment.profile.FragmentProfile;
 import com.aytekincomez.yeniapp.Activity.Holder.PostHolder;
 import com.aytekincomez.yeniapp.Activity.Model.Post;
 import com.aytekincomez.yeniapp.Activity.api.ApiClient;
 import com.aytekincomez.yeniapp.Activity.api.ApiInterface;
 import com.aytekincomez.yeniapp.R;
-
-import java.lang.ref.WeakReference;
+import com.squareup.picasso.Picasso;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
-
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
 public class PostAdapter extends RecyclerView.Adapter<PostHolder>{
+
     private List<Post> postList;
     private Context context;
     private ItemClickListener itemClickListener;
@@ -69,6 +53,13 @@ public class PostAdapter extends RecyclerView.Adapter<PostHolder>{
     @Override
     public void onBindViewHolder(@NonNull final PostHolder postHolder, final int position) {
         final Post post = postList.get(position);
+
+        //Profil fragmentine veritabanından gelen image path yolluyoruz.
+
+        String path = post.getImage();
+
+        String imageUrl = "http://aytekincomez.webutu.com/yeni/"+path;
+        Picasso.with(context).load(imageUrl).into(postHolder.ivProfileImage);
 
         postHolder.btnLike.setOnCheckedChangeListener(null);
 
@@ -148,7 +139,6 @@ public class PostAdapter extends RecyclerView.Adapter<PostHolder>{
         });
 
     }
-
     @Override
     public int getItemCount() {
         return postList.size();
@@ -205,4 +195,5 @@ public class PostAdapter extends RecyclerView.Adapter<PostHolder>{
     public interface ItemClickListener{
         void onItemClick(View view, int position);
     }
+
 }

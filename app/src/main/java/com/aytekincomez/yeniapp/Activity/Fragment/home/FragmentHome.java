@@ -56,8 +56,12 @@ public class FragmentHome extends Fragment implements FragmenHomeView{
         presenter.getPost();
 
         swipeRefreshLayout.setOnRefreshListener(
-                () -> presenter.getPost()
+                () -> {
+                    presenter.getPost();
+                    adapter.notifyDataSetChanged();
+                }
         );
+
 
         itemClickListener =((view1, position) -> {
             String name = post.get(position).getUser_name();

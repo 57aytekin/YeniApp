@@ -15,6 +15,9 @@ public class Post {
     @SerializedName("name")
     private String user_name;
     @Expose
+    @SerializedName("paths")
+    private String image;
+    @Expose
     @SerializedName("share_post")
     private String post_text;
     @Expose
@@ -53,5 +56,9 @@ public class Post {
 
     public String getTarih() {
         return tarih;
+    }
+
+    public String getImage() {
+        return image;
     }
 }

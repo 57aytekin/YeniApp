@@ -1,5 +1,6 @@
-package com.aytekincomez.yeniapp.Activity.Fragment;
+package com.aytekincomez.yeniapp.Activity.Fragment.edit;
 
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -23,9 +24,12 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.aytekincomez.yeniapp.Activity.Fragment.home.FragmentHome;
+import com.aytekincomez.yeniapp.Activity.Fragment.profile.FragmentProfilePresenter;
+import com.aytekincomez.yeniapp.Activity.Fragment.profile.FragmentProfileView;
 import com.aytekincomez.yeniapp.Activity.Manager.SessionManager;
 import com.aytekincomez.yeniapp.Activity.Model.Post;
 import com.aytekincomez.yeniapp.R;
+import com.squareup.picasso.Picasso;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -33,12 +37,16 @@ import org.json.JSONObject;
 import java.util.HashMap;
 import java.util.Map;
 
-public class FragmentEdit extends Fragment {
+import de.hdodenhof.circleimageview.CircleImageView;
+
+public class FragmentEdit extends Fragment implements FragmentProfileView {
 
     TextView username, tvShare;
     EditText etText;
-    Post post = new Post();
+    CircleImageView ivPhoto;
     SessionManager sessionManager;
+    FragmentProfilePresenter presenter;
+    ProgressDialog progressDialog;
     public static final String URL_POST = "http://aytekincomez.webutu.com/yeni/sharepost.php";
 
     @Nullable
@@ -48,18 +56,20 @@ public class FragmentEdit extends Fragment {
         username = view.findViewById(R.id.fragment_edit_username);
         tvShare = view.findViewById(R.id.tvShare);
         etText = view.findViewById(R.id.fragment_edit_etText);
+        ivPhoto = view.findViewById(R.id.fragment_edit_photo);
+        progressDialog = new ProgressDialog(getContext());
+        progressDialog.setMessage("Lütfen bekleyiniz");
+        presenter = new FragmentProfilePresenter(this);
 
         sessionManager = new SessionManager(view.getContext());
         HashMap<String, String> user = sessionManager.userDetail();
         String mUser = user.get(sessionManager.NAME);
-        username.setText(mUser);
+        int id = Integer.parseInt(user.get(sessionManager.USERID));
 
-        tvShare.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                addPost(view.getContext());
-            }
-        });
+        presenter.getImage(id);
+
+
+        tvShare.setOnClickListener(v -> addPost(view.getContext()));
         return view;
     }
 
@@ -73,27 +83,23 @@ public class FragmentEdit extends Fragment {
         StringRequest stringRequest = new StringRequest(
                 Request.Method.POST,
                 URL_POST,
-                new Response.Listener<String>() {
-                    @Override
-                    public void onResponse(String response) {
-                        try {
-                            JSONObject jsonObject = new JSONObject(response);
-                            String success = jsonObject.getString("success");
-                            Log.d("RESPONSE",success);
+                response -> {
+                    try {
+                        JSONObject jsonObject = new JSONObject(response);
+                        String success = jsonObject.getString("success");
 
-                            if(success.equals("1")){
-                                Toast.makeText(context, "Paylaşım yapıldı", Toast.LENGTH_SHORT).show();
-                                FragmentManager fragmentManager = getFragmentManager();
-                                FragmentTransaction transaction = fragmentManager.beginTransaction();
-                                transaction.replace(R.id.container, new FragmentHome());
-                                transaction.commit();
-                            }else if(success.equals("0")){
-                                Toast.makeText(context, "Sunucu tarafında hata", Toast.LENGTH_SHORT).show();
-                            }
-                        } catch (JSONException e) {
-                            e.printStackTrace();
-                            Toast.makeText(context, "Paylaşım yapılırken hata", Toast.LENGTH_SHORT).show();
+                        if(success.equals("1")){
+                            Toast.makeText(context, "Paylaşım yapıldı", Toast.LENGTH_SHORT).show();
+                            FragmentManager fragmentManager = getFragmentManager();
+                            FragmentTransaction transaction = fragmentManager.beginTransaction();
+                            transaction.replace(R.id.container, new FragmentHome());
+                            transaction.commit();
+                        }else if(success.equals("0")){
+                            Toast.makeText(context, "Sunucu tarafında hata", Toast.LENGTH_SHORT).show();
                         }
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                        Toast.makeText(context, "Paylaşım yapılırken hata", Toast.LENGTH_SHORT).show();
                     }
                 },
                 new Response.ErrorListener() {
@@ -104,7 +110,7 @@ public class FragmentEdit extends Fragment {
                 }
         ){
             @Override
-            protected Map<String, String> getParams() throws AuthFailureError {
+            protected Map<String, String> getParams() {
                 Map<String, String> params  = new HashMap<>();
                 params.put("user_id",user_id);
                 params.put("share_post",share_post);
@@ -116,4 +122,33 @@ public class FragmentEdit extends Fragment {
         RequestQueue queue = Volley.newRequestQueue(context);
         queue.add(stringRequest);
     }
+
+    @Override
+    public void showProgress() {
+        progressDialog.show();
+    }
+
+    @Override
+    public void hideProgress() {
+        progressDialog.hide();
+    }
+
+    @Override
+    public void onRequestSucces(String message) {
+        Toast.makeText(getContext(), message, Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    public void onRequestError(String message) {
+        Toast.makeText(getContext(), message, Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    public void onGetResult(HashMap<String, String> map) {
+        String name = map.get("Name");
+        String path = map.get("Paths");
+        String imageUrl = "http://aytekincomez.webutu.com/yeni/"+path;
+
+        username.setText(name);
+        Picasso.with(getContext()).load(imageUrl).into(ivPhoto);    }
 }

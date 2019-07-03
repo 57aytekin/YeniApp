@@ -10,12 +10,13 @@ import android.view.ViewGroup;
 
 import com.aytekincomez.yeniapp.R;
 
-public class FragmentMessage extends Fragment {
+public class FragmentProfileYakinda extends Fragment {
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.layout_fragment_message, container, false);
+        View view = inflater.inflate(R.layout.fragment_profile_yakinda, container, false);
+
         return view;
     }
 }

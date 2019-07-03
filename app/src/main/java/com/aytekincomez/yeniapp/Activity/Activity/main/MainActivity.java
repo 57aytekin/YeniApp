@@ -8,11 +8,11 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 
-import com.aytekincomez.yeniapp.Activity.Fragment.FragmentEdit;
+import com.aytekincomez.yeniapp.Activity.Fragment.edit.FragmentEdit;
 import com.aytekincomez.yeniapp.Activity.Fragment.home.FragmentHome;
 import com.aytekincomez.yeniapp.Activity.Fragment.FragmentLikes;
-import com.aytekincomez.yeniapp.Activity.Fragment.FragmentMessage;
-import com.aytekincomez.yeniapp.Activity.Fragment.FragmentProfile;
+import com.aytekincomez.yeniapp.Activity.Fragment.message.FragmentMessage;
+import com.aytekincomez.yeniapp.Activity.Fragment.profile.FragmentProfile;
 import com.aytekincomez.yeniapp.Activity.Manager.SessionManager;
 import com.aytekincomez.yeniapp.R;
 

@@ -18,13 +18,42 @@ public class User {
     private String email;
 
     @Expose
+    @SerializedName("biyografi")
+    private String biyografi;
+
+    public String getBiyografi() {
+        return biyografi;
+    }
+
+    public void setBiyografi(String biyografi) {
+        this.biyografi = biyografi;
+    }
+
+    @Expose
+    @SerializedName("image")
+    private String image;
+
+    @Expose
     @SerializedName("password")
     private String password;
+
+    @Expose
+    @SerializedName("paths")
+    private String paths;
+
+    public String getPaths() {
+        return paths;
+    }
+
+    public void setPaths(String paths) {
+        this.paths = paths;
+    }
 
     @Expose
     @SerializedName("success") private boolean success;
     @Expose
     @SerializedName("message") private String message;
+
 
     public boolean isSuccess() {
         return success;
@@ -36,6 +65,14 @@ public class User {
 
     public String getMessage() {
         return message;
+    }
+
+    public String getImage() {
+        return image;
+    }
+
+    public void setImage(String image) {
+        this.image = image;
     }
 
     public void setMessage(String message) {
