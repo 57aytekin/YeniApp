@@ -14,6 +14,7 @@ import com.aytekincomez.yeniapp.Activity.Activity.login.LoginActivity;
 import com.aytekincomez.yeniapp.Activity.Activity.main.MainActivity;
 
 import com.aytekincomez.yeniapp.R;
+import com.google.firebase.iid.FirebaseInstanceId;
 
 
 public class RegisterActivity extends AppCompatActivity implements RegisterView{
@@ -38,6 +39,7 @@ public class RegisterActivity extends AppCompatActivity implements RegisterView{
                 String email = etEmail.getText().toString().trim();
                 String password = etPassword.getText().toString().trim();
                 String passwordTry = etPasswordTry.getText().toString().trim();
+                String token = FirebaseInstanceId.getInstance().getToken();
 
                 if(name.isEmpty()){
                     etUserName.setError("Lütfen Doldurunuz");
@@ -51,7 +53,7 @@ public class RegisterActivity extends AppCompatActivity implements RegisterView{
                     etPassword.setError("Eşleşmiyor");
                     etPasswordTry.setError("Eşleşmiyor");
                 }else {
-                    presenter.saveUser(name, email, password);
+                    presenter.saveUser(name, email, password, token);
                     startActivity(new Intent(getApplicationContext(), MainActivity.class));
                 }
             }

@@ -15,14 +15,13 @@ import android.widget.Toast;
 import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
-import com.android.volley.Response;
-import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.aytekincomez.yeniapp.Activity.Activity.main.MainActivity;
 import com.aytekincomez.yeniapp.Activity.Activity.register.RegisterActivity;
 import com.aytekincomez.yeniapp.Activity.Manager.SessionManager;
 import com.aytekincomez.yeniapp.R;
+import com.google.firebase.iid.FirebaseInstanceId;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -38,6 +37,7 @@ public class LoginActivity extends AppCompatActivity{
     ProgressBar loading;
     private static String Login_URL = "http://aytekincomez.webutu.com/yeni/login.php";
     SessionManager sessionManager;
+    LoginPresenter presenter;
 
 
     @Override
@@ -45,12 +45,12 @@ public class LoginActivity extends AppCompatActivity{
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
         uiElement();
+        presenter = new LoginPresenter();
         sessionManager = new SessionManager(this);
 
         btnSignIn.setOnClickListener(v -> {
             String email = etEmail.getText().toString().trim();
             String pass = etPassword.getText().toString().trim();
-
 
             if (email.isEmpty()){
                 etEmail.setError("Email adresinizi giriniz");
@@ -65,12 +65,7 @@ public class LoginActivity extends AppCompatActivity{
             }
         });
 
-        tvRegister.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                startActivity(new Intent(getApplicationContext(), RegisterActivity.class));
-            }
-        });
+        tvRegister.setOnClickListener(v -> startActivity(new Intent(getApplicationContext(), RegisterActivity.class)));
     }
 
     public void uiElement(){
@@ -87,56 +82,52 @@ public class LoginActivity extends AppCompatActivity{
         StringRequest stringRequest = new StringRequest(
                 Request.Method.POST,
                 Login_URL,
-                new Response.Listener<String>() {
-                    @Override
-                    public void onResponse(String response) {
-                        try {
-                            JSONObject jsonObject = new JSONObject(response);
-                            String success = jsonObject.getString("success");
-                            JSONArray jsonArray = jsonObject.getJSONArray("login");
-                            Log.d("RESPONSE",response);
+                response -> {
+                    try {
+                        JSONObject jsonObject = new JSONObject(response);
+                        String success = jsonObject.getString("success");
+                        JSONArray jsonArray = jsonObject.getJSONArray("login");
+                        Log.d("RESPONSE",response);
+                        String token = FirebaseInstanceId.getInstance().getToken();
 
-                            if (success.equals("1")){
+                        if (success.equals("1")){
 
-                                for (int i = 0; i<jsonArray.length(); i++){
-                                    JSONObject object = jsonArray.getJSONObject(i);
-                                    String name = object.getString("name");
-                                    String email = object.getString("email");
-                                    int id = object.getInt("id");
+                            for (int i = 0; i<jsonArray.length(); i++){
+                                JSONObject object = jsonArray.getJSONObject(i);
+                                String name = object.getString("name");
+                                String email1 = object.getString("email");
+                                int id = object.getInt("id");
 
-                                    sessionManager.createSession(name, email, ""+id);
+                                sessionManager.createSession(name, email1, ""+id);
+                                presenter.updateToken(id, token);
 
-                                    Toast.makeText(LoginActivity.this, "Giriş Başarılı Hoşgeldin: "+id, Toast.LENGTH_SHORT).show();
-                                    startActivity(new Intent(getApplicationContext(), MainActivity.class));
-                                }
-
-                                loading.setVisibility(View.GONE);
-
-                            }else {
-                                Toast.makeText(LoginActivity.this, "Kullanıcı adı veya şifre hatalı", Toast.LENGTH_SHORT).show();
-                                loading.setVisibility(View.GONE);
-                                btnSignIn.setVisibility(View.VISIBLE);
-                                tvRegister.setVisibility(View.VISIBLE);
+                                Toast.makeText(LoginActivity.this, "Giriş Başarılı Hoşgeldin: "+id, Toast.LENGTH_SHORT).show();
+                                startActivity(new Intent(getApplicationContext(), MainActivity.class));
                             }
 
-                        } catch (Exception e) {
-                            e.printStackTrace();
+                            loading.setVisibility(View.GONE);
+
+                        }else {
+                            Toast.makeText(LoginActivity.this, "Kullanıcı adı veya şifre hatalı", Toast.LENGTH_SHORT).show();
                             loading.setVisibility(View.GONE);
                             btnSignIn.setVisibility(View.VISIBLE);
                             tvRegister.setVisibility(View.VISIBLE);
-                            Toast.makeText(LoginActivity.this, "ERROR"+e.toString(), Toast.LENGTH_SHORT).show();
-
                         }
-                    }
-                },
-                new Response.ErrorListener() {
-                    @Override
-                    public void onErrorResponse(VolleyError error) {
+
+                    } catch (Exception e) {
+                        e.printStackTrace();
                         loading.setVisibility(View.GONE);
                         btnSignIn.setVisibility(View.VISIBLE);
                         tvRegister.setVisibility(View.VISIBLE);
-                        Toast.makeText(LoginActivity.this, "ERROR"+error.toString(), Toast.LENGTH_SHORT).show();
+                        Toast.makeText(LoginActivity.this, "ERROR"+e.toString(), Toast.LENGTH_SHORT).show();
+
                     }
+                },
+                error -> {
+                    loading.setVisibility(View.GONE);
+                    btnSignIn.setVisibility(View.VISIBLE);
+                    tvRegister.setVisibility(View.VISIBLE);
+                    Toast.makeText(LoginActivity.this, "ERROR"+error.toString(), Toast.LENGTH_SHORT).show();
                 }
         ){
             @Override

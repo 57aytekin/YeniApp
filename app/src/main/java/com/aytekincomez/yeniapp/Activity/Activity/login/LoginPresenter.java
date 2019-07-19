@@ -1,4 +1,6 @@
-package com.aytekincomez.yeniapp.Activity.Activity.register;
+package com.aytekincomez.yeniapp.Activity.Activity.login;
+
+import android.util.Log;
 
 import com.aytekincomez.yeniapp.Activity.Model.User;
 import com.aytekincomez.yeniapp.Activity.api.ApiClient;
@@ -8,36 +10,27 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class RegisterPresenter {
+public class LoginPresenter {
 
-    RegisterView view;
-
-    public RegisterPresenter(RegisterView view) {
-        this.view = view;
-    }
-
-    void saveUser(String name, String email, String password, String token){
-        view.showProgress();
+    void updateToken(int id, String token){
         ApiInterface apiInterface = ApiClient.getApiClient().create(ApiInterface.class);
-        Call<User> call = apiInterface.saveUser(name, email, password, token);
+        Call<User> call = apiInterface.update_token(id, token);
         call.enqueue(new Callback<User>() {
             @Override
             public void onResponse(Call<User> call, Response<User> response) {
-                view.hideProgress();
                 if(response.isSuccessful() && response.body() != null){
                     Boolean success = response.body().isSuccess();
                     if(success){
-                        view.onRequestSuccess(response.body().getMessage());
+                        Log.d("Success", response.message());
                     }else{
-                        view.onRequestError(response.body().getMessage());
+                        Log.d("Success", response.message());
                     }
                 }
             }
 
             @Override
             public void onFailure(Call<User> call, Throwable t) {
-                view.hideProgress();
-                view.onRequestError(t.getLocalizedMessage());
+
             }
         });
     }

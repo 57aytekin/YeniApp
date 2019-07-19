@@ -4,6 +4,7 @@ import android.content.Context;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.text.Html;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -50,9 +51,10 @@ public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.MyViewHo
     public void onBindViewHolder(@NonNull CommentAdapter.MyViewHolder myViewHolder, int i) {
         SessionManager sessionManager = new SessionManager(context);
         HashMap<String, String> user = sessionManager.userDetail();
-        String user_name = user.get(sessionManager.NAME);
+        String user_name = user.get(SessionManager.NAME);
+        int user_id = Integer.parseInt(user.get(SessionManager.USERID));
 
-        if(!(comments.get(i).getName()).equals(user_name)){
+        if((!(comments.get(i).getName()).equals(user_name) && (post_username.equals(user_name)))){
             myViewHolder.btnLike.setVisibility(View.VISIBLE);
             if (comments.get(i).getBegeniDurum() == 1){
                 myViewHolder.btnLike.setBackgroundResource(R.drawable.ic_favorite_orange);
@@ -66,10 +68,16 @@ public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.MyViewHo
         }
 
 
+
+
         myViewHolder.btnLike.setOnCheckedChangeListener((buttonView, isChecked) -> {
+            int durum = -1;
             if(isChecked){
+                durum = 0;
                 myViewHolder.btnLike.setBackgroundResource(R.drawable.ic_favorite_orange);
                 updateCommentLike(comments.get(i).getId(), 1);
+                saveLikes(user_id, comments.get(i).getUser_id(), comments.get(i).getId());
+                pushNotification(post_username, comments.get(i).getName(), durum);
 
             }else{
                 myViewHolder.btnLike.setBackgroundResource(R.drawable.ic_favorite_black_24dp);
@@ -80,9 +88,9 @@ public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.MyViewHo
         String commentUserName = comments.get(i).getName();
         String comment = comments.get(i).getComment();
 
-        if(post_username.equals(comments.get(i).getName())){
+        /*if(post_username.equals(comments.get(i).getName())){
             myViewHolder.btnLike.setVisibility(View.GONE);
-        }
+        }*/
         String bold = "<b>"+commentUserName+"</b>"+" "+comment;
         myViewHolder.tvCommnet.setText(Html.fromHtml(bold));
 
@@ -155,6 +163,38 @@ public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.MyViewHo
             @Override
             public void onFailure(Call<Void> call, Throwable t) {
                 Toast.makeText(context, ""+t.getLocalizedMessage(), Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+
+    public void saveLikes(int post_sahibi_id, int comment_sahibi_id, int comment_id){
+        ApiInterface apiInterface = ApiClient.getApiClient().create(ApiInterface.class);
+        Call<Void> call = apiInterface.saveLikes(post_sahibi_id, comment_sahibi_id, comment_id);
+        call.enqueue(new Callback<Void>() {
+            @Override
+            public void onResponse(Call<Void> call, Response<Void> response) {
+                Log.d("LİKES",response.toString());
+            }
+
+            @Override
+            public void onFailure(Call<Void> call, Throwable t) {
+                Log.d("LİKES", t.getLocalizedMessage());
+            }
+        });
+    }
+
+    void pushNotification(String name, String comment_name, int durum){
+        ApiInterface apiInterface = ApiClient.getApiClient().create(ApiInterface.class);
+        Call<Void> call = apiInterface.push(name, comment_name, durum);
+        call.enqueue(new Callback<Void>() {
+            @Override
+            public void onResponse(Call<Void> call, Response<Void> response) {
+
+            }
+
+            @Override
+            public void onFailure(Call<Void> call, Throwable t) {
+
             }
         });
     }

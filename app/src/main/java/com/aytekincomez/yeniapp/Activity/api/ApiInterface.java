@@ -1,6 +1,7 @@
 package com.aytekincomez.yeniapp.Activity.api;
 
 import com.aytekincomez.yeniapp.Activity.Model.Comment;
+import com.aytekincomez.yeniapp.Activity.Model.Likes;
 import com.aytekincomez.yeniapp.Activity.Model.Post;
 import com.aytekincomez.yeniapp.Activity.Model.User;
 
@@ -19,7 +20,8 @@ public interface ApiInterface {
     Call<User> saveUser(
             @Field("name") String name,
             @Field("email") String email,
-            @Field("password") String password
+            @Field("password") String password,
+            @Field("token") String token
     );
 
     @FormUrlEncoded
@@ -78,6 +80,13 @@ public interface ApiInterface {
             @Field("biyografi") String biyografi
     );
 
+    @FormUrlEncoded
+    @POST("update_token.php")
+    Call<User> update_token(
+            @Field("id") int id,
+            @Field("token") String token
+    );
+
     @GET("getpost.php")
     Call<List<Post>> getPost();
 
@@ -88,6 +97,25 @@ public interface ApiInterface {
     @POST("get_image.php")
     Call<List<User>> getImage(
             @Field("id") int id
+    );
+
+    @FormUrlEncoded
+    @POST("save_likes.php")
+    Call<Void> saveLikes(
+            @Field("post_sahibi_id") int post_sahibi_id,
+            @Field("comment_sahibi_id") int comment_sahibi_id,
+            @Field("comment_id") int comment_id
+    );
+
+    @GET("get_likes.php")
+    Call<List<Likes>> getLikes();
+
+    @FormUrlEncoded
+    @POST("push_notification.php")
+    Call<Void> push(
+            @Field("name") String name,
+            @Field("comment_name") String comment_name,
+            @Field("durum") int durum
     );
 
 }

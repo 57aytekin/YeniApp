@@ -3,13 +3,11 @@ package com.aytekincomez.yeniapp.Activity.Activity.comment;
 import android.app.ProgressDialog;
 import android.graphics.PorterDuff;
 import android.graphics.drawable.Drawable;
+import android.os.Bundle;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
-import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -38,12 +36,14 @@ public class CommentActivity extends AppCompatActivity implements CommentView {
     CommentPresenter presenter;
 
     ProgressDialog progressDialog;
+    int durum;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_comment);
         uiElement();
+        durum = -1;
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         final Drawable backArrow = getResources().getDrawable(R.drawable.ic_arrow_back_black_24dp);
@@ -66,6 +66,7 @@ public class CommentActivity extends AppCompatActivity implements CommentView {
             String comment = etCommnet.getText().toString().trim();
             HashMap<String, String> map = sessionManager.userDetail();
             String user_id = map.get(sessionManager.USERID);
+            String comment_name = map.get(sessionManager.NAME);
 
             if(comment.isEmpty()){
                 etCommnet.setError("Lütfen yorumunuzu giriniz");
@@ -73,6 +74,12 @@ public class CommentActivity extends AppCompatActivity implements CommentView {
                 presenter.saveComment(Integer.parseInt(user_id),int_post_id,comment,0);
                 etCommnet.setText("");
                 presenter.getComment(int_post_id);
+
+                if(!post_username.equals(comment_name)){
+                    durum = 1;
+                    presenter.pushNofication(post_username, comment_name, durum);
+                }
+
                 //presenter.updateCommentCount(postidd,"5");
             }
         });
