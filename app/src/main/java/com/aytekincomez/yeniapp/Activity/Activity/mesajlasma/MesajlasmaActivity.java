@@ -1,4 +1,4 @@
-package com.aytekincomez.yeniapp.Activity.Activity;
+package com.aytekincomez.yeniapp.Activity.Activity.mesajlasma;
 
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -22,9 +22,12 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.squareup.picasso.Picasso;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
@@ -36,6 +39,8 @@ public class MesajlasmaActivity extends AppCompatActivity implements View.OnClic
     EditText etMesaj;
     Button btnMesaj;
     SessionManager sessionManager;
+    MesajlasmaPresenter presenter;
+    int durum;
 
     ChatAdapter chatAdapter;
     List<Chat> chats;
@@ -52,19 +57,26 @@ public class MesajlasmaActivity extends AppCompatActivity implements View.OnClic
         sessionManager = new SessionManager(getApplicationContext());
         HashMap<String, String> map = sessionManager.userDetail();
         String userid = map.get(sessionManager.USERID);
+        String username = map.get(sessionManager.NAME);
 
         String name = getIntent().getStringExtra("post_paylasan");
         String photo = getIntent().getStringExtra("photo");
+        String messagePhoto ="http://aytekincomez.webutu.com/yeni/image/"+username+".jpg";
         String post_paylasan_id = getIntent().getStringExtra("post_sahibi_id");
+
+        //Anlık zamanı alıp veritabanına gönderiyoruz
+        SimpleDateFormat bicim = new SimpleDateFormat("dd.M.yyyy HH:mm:ss", Locale.US);
+        String currentDateandTime = bicim.format(new Date());
 
         btnMesaj.setOnClickListener(v -> {
             if(!etMesaj.equals("")){
-                sendMessage(userid, post_paylasan_id, etMesaj.getText().toString(), "121212");
+                sendMessage(userid, post_paylasan_id, username, etMesaj.getText().toString(), messagePhoto,""+currentDateandTime);
+                durum = 2;
+                presenter.pushNofication(name, etMesaj.getText().toString(), durum);
             }else{
                 etMesaj.setError("Herhangi bir mesaj girmediniz");
             }
             etMesaj.setText("");
-            System.out.println("USER ID=> "+userid+" PAYLASAN ID=> "+post_paylasan_id);
             readMessage(userid, post_paylasan_id);
         });
 
@@ -91,6 +103,8 @@ public class MesajlasmaActivity extends AppCompatActivity implements View.OnClic
         tvUsername = findViewById(R.id.tvMesajlasmaUsername);
         etMesaj = findViewById(R.id.etMesaj);
         btnMesaj = findViewById(R.id.btnMesajlasma);
+        presenter = new MesajlasmaPresenter();
+        durum = -1;
         //recylerView
         recyclerView = findViewById(R.id.recyclerMesajlasma);
         recyclerView.setHasFixedSize(true);
@@ -108,13 +122,15 @@ public class MesajlasmaActivity extends AppCompatActivity implements View.OnClic
 
     }
 
-    private void sendMessage(String gonderen, String alici, String message, String tarih){
+    private void sendMessage(String gonderen, String alici, String aliciName, String message, String photo, String tarih){
         DatabaseReference reference = FirebaseDatabase.getInstance().getReference();
 
         HashMap<String, String> map = new HashMap<>();
         map.put("gonderen", gonderen);
         map.put("alici", alici);
+        map.put("aliciName", aliciName);
         map.put("message",message);
+        map.put("photo", photo);
         map.put("tarih",tarih);
 
         reference.child("Chats").push().setValue(map);
@@ -130,15 +146,13 @@ public class MesajlasmaActivity extends AppCompatActivity implements View.OnClic
                 chats.clear();
                 for(DataSnapshot snapshot : dataSnapshot.getChildren()){
                     Chat chat = snapshot.getValue(Chat.class);
-                    System.out.println("GONDEREN => "+chat.getGonderen()+" ALICI => "+chat.getAlici()+" USEr=>"+gondere);
                     if(chat.getAlici().equals(alici) && chat.getGonderen().equals(gondere)
                             || chat.getAlici().equals(gondere) && chat.getGonderen().equals(alici)){
                         chats.add(chat);
                     }
-
-                    System.out.println("GONDEREN => "+chat.getGonderen());
                     chatAdapter = new ChatAdapter(getApplicationContext(), chats);
                     recyclerView.setAdapter(chatAdapter);
+                    recyclerView.smoothScrollToPosition(recyclerView.getAdapter().getItemCount());
                 }
             }
 

@@ -12,7 +12,7 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-class CommentPresenter {
+public class CommentPresenter {
 
     private CommentView view;
     private ArrayList<Comment> comments;

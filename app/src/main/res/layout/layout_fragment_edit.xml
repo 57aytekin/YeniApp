@@ -69,6 +69,7 @@
         android:layout_marginLeft="32dp"
         android:layout_marginTop="20dp"
         android:layout_marginRight="32dp"
+        android:inputType="textCapSentences"
         android:gravity="start"
         android:textSize="16sp"
         android:background="@drawable/card_view_gorunum"

@@ -46,10 +46,6 @@ public class CommentActivity extends AppCompatActivity implements CommentView {
         durum = -1;
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-        final Drawable backArrow = getResources().getDrawable(R.drawable.ic_arrow_back_black_24dp);
-        backArrow.setColorFilter(getResources().getColor(R.color.white), PorterDuff.Mode.SRC_ATOP);
-        getSupportActionBar().setHomeAsUpIndicator(backArrow);
-
         String postidd = getIntent().getExtras().getString("post_id");
         post_username = getIntent().getExtras().getString("user_name");
         int int_post_id = Integer.parseInt(postidd);
@@ -87,6 +83,11 @@ public class CommentActivity extends AppCompatActivity implements CommentView {
     }
 
     public void uiElement(){
+
+        final Drawable backArrow = getResources().getDrawable(R.drawable.ic_arrow_back_black_24dp);
+        backArrow.setColorFilter(getResources().getColor(R.color.white), PorterDuff.Mode.SRC_ATOP);
+        getSupportActionBar().setHomeAsUpIndicator(backArrow);
+
         recyclerView = findViewById(R.id.recyclerviewComment);
         LinearLayoutManager layoutManager = new LinearLayoutManager(getApplicationContext());
         recyclerView.setLayoutManager(layoutManager);

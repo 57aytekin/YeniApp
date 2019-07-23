@@ -10,7 +10,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import com.aytekincomez.yeniapp.Activity.Activity.MesajlasmaActivity;
+import com.aytekincomez.yeniapp.Activity.Activity.mesajlasma.MesajlasmaActivity;
 import com.aytekincomez.yeniapp.Activity.Manager.SessionManager;
 import com.aytekincomez.yeniapp.Activity.Model.Likes;
 import com.aytekincomez.yeniapp.R;
@@ -58,6 +58,8 @@ public class LikesAdapter extends RecyclerView.Adapter<LikesAdapter.MyViewHolder
             myViewHolder.tvUserName.setOnClickListener(v -> {
                 Intent intent = new Intent(context, MesajlasmaActivity.class);
                 intent.putExtra("post_paylasan",likes.get(i).getName());
+                String post_sahibi_id = String.valueOf(likes.get(i).getPost_sahibi_id());
+                intent.putExtra("post_sahibi_id", post_sahibi_id);
                 intent.putExtra("photo", photo_link);
                 context.startActivity(intent);
             });
