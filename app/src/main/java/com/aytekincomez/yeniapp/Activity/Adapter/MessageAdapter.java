@@ -42,15 +42,7 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.MessageV
         messageView.tvMessage.setText(list.get(i).getMessage());
 
         String tarih = list.get(i).getTarih();
-
-
-        for(int a =0; a<list.size(); a++){
-            if(list.get(a).getAlici().equals(list.get(i).getAlici())){
-                messageView.tvMessage.setText(list.get(a).getMessage());
-                tarihFarkiHesapla(tarih, messageView.tvDate);
-                removeAt(a);
-            }
-        }
+        tarihFarkiHesapla(tarih, messageView.tvDate);
     }
 
     @Override
@@ -101,10 +93,5 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.MessageV
         } catch (ParseException e) {
             e.printStackTrace();
         }
-    }
-    public void removeAt(int position) {
-        list.remove(position);
-        notifyItemRemoved(position);
-        notifyItemRangeChanged(position, list.size());
     }
 }

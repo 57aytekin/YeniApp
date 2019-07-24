@@ -14,6 +14,7 @@ import android.widget.TextView;
 import com.aytekincomez.yeniapp.Activity.Adapter.ChatAdapter;
 import com.aytekincomez.yeniapp.Activity.Manager.SessionManager;
 import com.aytekincomez.yeniapp.Activity.Model.Chat;
+import com.aytekincomez.yeniapp.Activity.Model.ChatList;
 import com.aytekincomez.yeniapp.R;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -67,6 +68,9 @@ public class MesajlasmaActivity extends AppCompatActivity implements View.OnClic
         //Anlık zamanı alıp veritabanına gönderiyoruz
         SimpleDateFormat bicim = new SimpleDateFormat("dd.M.yyyy HH:mm:ss", Locale.US);
         String currentDateandTime = bicim.format(new Date());
+
+        int alici_id = Integer.parseInt(userid);
+        int gonderen_id = Integer.parseInt(post_paylasan_id);
 
         btnMesaj.setOnClickListener(v -> {
             if(!etMesaj.equals("")){
@@ -123,7 +127,7 @@ public class MesajlasmaActivity extends AppCompatActivity implements View.OnClic
     }
 
     private void sendMessage(String gonderen, String alici, String aliciName, String message, String photo, String tarih){
-        DatabaseReference reference = FirebaseDatabase.getInstance().getReference();
+        DatabaseReference references = FirebaseDatabase.getInstance().getReference();
 
         HashMap<String, String> map = new HashMap<>();
         map.put("gonderen", gonderen);
@@ -133,7 +137,38 @@ public class MesajlasmaActivity extends AppCompatActivity implements View.OnClic
         map.put("photo", photo);
         map.put("tarih",tarih);
 
-        reference.child("Chats").push().setValue(map);
+        references.child("Chats").push().setValue(map);
+
+        DatabaseReference mRef = FirebaseDatabase.getInstance().getReference();
+        HashMap<String, String> mMap = new HashMap<>();
+        mMap.put("gondere",gonderen);
+        mMap.put("alici", alici);
+        mMap.put("aliciName", aliciName);
+        mMap.put("message",message);
+        mMap.put("photo",photo);
+        mRef.child("ChatList").push().setValue(mMap);
+
+
+        reference = FirebaseDatabase.getInstance().getReference("ChatList");
+        reference.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                for (DataSnapshot snapshot : dataSnapshot.getChildren()){
+                    ChatList chatList = snapshot.getValue(ChatList.class);
+                    if (gonderen.equals(chatList.getGonderen()) && alici.equals(chatList.getAlici())){
+                        //Update et
+                    }else{
+
+                    }
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+
     }
 
     private void readMessage(String gondere, String alici){
@@ -162,4 +197,5 @@ public class MesajlasmaActivity extends AppCompatActivity implements View.OnClic
             }
         });
     }
+
 }

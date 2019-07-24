@@ -1,31 +1,13 @@
 package com.aytekincomez.yeniapp.Activity.Model;
 
-public class Chat {
+public class ChatList {
+
     private int id;
     private String gonderen;
     private String alici;
     private String aliciName;
     private String message;
-    private String tarih;
     private String photo;
-
-    public String getAliciName() {
-        return aliciName;
-    }
-
-    public void setAliciName(String aliciName) {
-        this.aliciName = aliciName;
-    }
-
-
-
-    public String getPhoto() {
-        return photo;
-    }
-
-    public void setPhoto(String photo) {
-        this.photo = photo;
-    }
 
     public int getId() {
         return id;
@@ -51,6 +33,14 @@ public class Chat {
         this.alici = alici;
     }
 
+    public String getAliciName() {
+        return aliciName;
+    }
+
+    public void setAliciName(String aliciName) {
+        this.aliciName = aliciName;
+    }
+
     public String getMessage() {
         return message;
     }
@@ -59,11 +49,11 @@ public class Chat {
         this.message = message;
     }
 
-    public String getTarih() {
-        return tarih;
+    public String getPhoto() {
+        return photo;
     }
 
-    public void setTarih(String tarih) {
-        this.tarih = tarih;
+    public void setPhoto(String photo) {
+        this.photo = photo;
     }
 }

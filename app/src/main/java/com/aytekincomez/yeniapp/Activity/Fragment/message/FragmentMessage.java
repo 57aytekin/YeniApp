@@ -50,19 +50,22 @@ public class FragmentMessage extends Fragment {
     private void getData(String username) {
         chats = new ArrayList<>();
 
-        reference = FirebaseDatabase.getInstance().getReference("Chats");
+        reference = FirebaseDatabase.getInstance().getReference("ChatList");
         reference.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 chats.clear();
-                for(DataSnapshot snapshot : dataSnapshot.getChildren()){
-                    Chat chat = snapshot.getValue(Chat.class);
-                    if(chat.getAlici().equals(username)){
-                        chats.add(chat);
+                if (!dataSnapshot.exists()){
+                    for(DataSnapshot snapshot : dataSnapshot.getChildren()){
+                        Chat chat = snapshot.getValue(Chat.class);
+                        if(chat.getAlici().equals(username)){
+                            chats.add(chat);
+                        }
+                        adapter = new MessageAdapter(getContext(), chats);
+                        recyclerView.setAdapter(adapter);
                     }
-                    adapter = new MessageAdapter(getContext(), chats);
-                    recyclerView.setAdapter(adapter);
                 }
+
             }
 
             @Override
