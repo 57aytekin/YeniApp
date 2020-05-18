@@ -73,6 +73,7 @@ public class CommentActivity extends AppCompatActivity implements CommentView {
 
                 if(!post_username.equals(comment_name)){
                     durum = 1;
+                    System.out.println("POST_NAME: "+post_username+" Comment_NAME: "+comment_name+" DURUM: "+durum);
                     presenter.pushNofication(post_username, comment_name, durum);
                 }
 

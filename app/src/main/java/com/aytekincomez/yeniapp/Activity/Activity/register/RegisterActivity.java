@@ -4,6 +4,8 @@ import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -23,6 +25,7 @@ public class RegisterActivity extends AppCompatActivity implements RegisterView{
     private Button btnRegister;
     private ProgressDialog progressDialog;
     private TextView tvLogScreen;
+    private int durum = 0;
 
     RegisterPresenter presenter;
 
@@ -32,30 +35,49 @@ public class RegisterActivity extends AppCompatActivity implements RegisterView{
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_register);
         uiElement();
-        btnRegister.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                String name = etUserName.getText().toString().trim();
-                String email = etEmail.getText().toString().trim();
-                String password = etPassword.getText().toString().trim();
-                String passwordTry = etPasswordTry.getText().toString().trim();
-                String token = FirebaseInstanceId.getInstance().getToken();
+        btnRegister.setOnClickListener(v -> {
+            String name = etUserName.getText().toString().trim();
+            String email = etEmail.getText().toString().trim();
+            String password = etPassword.getText().toString().trim();
+            String passwordTry = etPasswordTry.getText().toString().trim();
+            String token = FirebaseInstanceId.getInstance().getToken();
 
-                if(name.isEmpty()){
-                    etUserName.setError("Lütfen Doldurunuz");
-                }else if(email.isEmpty()){
-                    etEmail.setError("Lütfen Doldurunuz");
-                }else if(password.isEmpty()){
-                    etPassword.setError("Lütfen Doldurunuz");
-                }else if(passwordTry.isEmpty()){
-                    etPasswordTry.setError("Lütfen Doldurunuz");
-                }else if(!password.equals(passwordTry)){
-                    etPassword.setError("Eşleşmiyor");
-                    etPasswordTry.setError("Eşleşmiyor");
-                }else {
-                    presenter.saveUser(name, email, password, token);
-                    startActivity(new Intent(getApplicationContext(), MainActivity.class));
+            String emailPattern = "[a-zA-Z0-9._-]+@[a-z]+\\.+[a-z]+";
+            etEmail.addTextChangedListener(new TextWatcher() {
+                @Override
+                public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
                 }
+
+                @Override
+                public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+                }
+
+                @Override
+                public void afterTextChanged(Editable s) {
+                    if(email.matches(emailPattern)){
+                        durum = 1;
+                    }else{
+                        durum = 0;
+                    }
+                }
+            });
+
+            if(name.isEmpty() || name.length() <5 ){
+                etUserName.setError("İsim alanı 5 karakterden küçük olamaz");
+            }else if(email.isEmpty() || durum == 0){
+                etEmail.setError("Lütfen geçerli bir e-mail adresi giriniz");
+            }else if(password.isEmpty() || password.length() < 9){
+                etPassword.setError("Şifreniz 9 karakterden küçük olamaz");
+            }else if(passwordTry.isEmpty() ||passwordTry.length() < 9){
+                etPasswordTry.setError("Şifreniz 9 karakterden küçük olamaz");
+            }else if(!password.equals(passwordTry)){
+                etPassword.setError("Eşleşmiyor");
+                etPasswordTry.setError("Eşleşmiyor");
+            }else {
+                presenter.saveUser(name, email, password, token);
+                startActivity(new Intent(getApplicationContext(), MainActivity.class));
             }
         });
         tvLogScreen.setOnClickListener(new View.OnClickListener() {

@@ -3,26 +3,26 @@ package com.aytekincomez.yeniapp.Activity.Adapter;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.os.Bundle;
 import android.support.annotation.NonNull;
-import android.support.v4.app.FragmentManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+
 import com.aytekincomez.yeniapp.Activity.Activity.comment.CommentActivity;
-import com.aytekincomez.yeniapp.Activity.Fragment.profile.FragmentProfile;
 import com.aytekincomez.yeniapp.Activity.Holder.PostHolder;
 import com.aytekincomez.yeniapp.Activity.Model.Post;
 import com.aytekincomez.yeniapp.Activity.api.ApiClient;
 import com.aytekincomez.yeniapp.Activity.api.ApiInterface;
 import com.aytekincomez.yeniapp.R;
 import com.squareup.picasso.Picasso;
+
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
+
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -58,7 +58,7 @@ public class PostAdapter extends RecyclerView.Adapter<PostHolder>{
 
         String path = post.getImage();
 
-        String imageUrl = "http://aytekincomez.webutu.com/yeni/"+path;
+        String imageUrl = "http://aytekincomezz.000webhostapp.com/YeniApp/"+path;
         Picasso.with(context).load(imageUrl).into(postHolder.ivProfileImage);
 
         postHolder.btnLike.setOnCheckedChangeListener(null);
@@ -122,6 +122,7 @@ public class PostAdapter extends RecyclerView.Adapter<PostHolder>{
                 String likeC = String.valueOf(like_count);
                 String post_id = String.valueOf(post.getPost_id());
                 postHolder.likeCount.setText(like_count+" Beğeni");
+                System.out.println("POST_ID ="+post_id+" LİKE COUNT => "+likeC);
                 updateLikeCount(post_id,likeC);
 
 

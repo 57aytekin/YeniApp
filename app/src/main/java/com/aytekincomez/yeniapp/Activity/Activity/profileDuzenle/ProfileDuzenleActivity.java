@@ -217,7 +217,7 @@ public class ProfileDuzenleActivity extends AppCompatActivity implements View.On
         String name = user.get(0).getName();
         String path = user.get(0).getPaths();
 
-        String imageUrl = "http://aytekincomez.webutu.com/yeni/"+path;
+        String imageUrl = "http://aytekincomezz.000webhostapp.com/YeniApp/"+path;
         etUserName.setText(name);
         Picasso.with(getApplicationContext()).load(imageUrl).into(ivPhoto);
 

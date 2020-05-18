@@ -5,8 +5,8 @@ import retrofit2.converter.gson.GsonConverterFactory;
 
 public class ApiClient {
 
-    private static final String BASE_URL = "http://aytekincomez.webutu.com/yeni/";
-    private static final String PHOTO_URL = "http://aytekincomez.webutu.com/yeni/image/";
+    private static final String BASE_URL = "https://aytekincomezz.000webhostapp.com/YeniApp/";
+    private static final String PHOTO_URL = "https://aytekincomezz.000webhostapp.com/YeniApp/image/";
     private static Retrofit retrofit;
 
     public static Retrofit getApiPhotoClient(){

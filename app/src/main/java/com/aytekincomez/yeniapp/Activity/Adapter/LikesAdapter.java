@@ -51,7 +51,7 @@ public class LikesAdapter extends RecyclerView.Adapter<LikesAdapter.MyViewHolder
             myViewHolder.ivPhoto.setVisibility(View.VISIBLE);
 
             //Bildiri photo larını çekiyoruz
-            String photo_link = "http://aytekincomez.webutu.com/yeni/"+likes.get(i).getPaths();
+            String photo_link = "http://aytekincomezz.000webhostapp.com/YeniApp/"+likes.get(i).getPaths();
             Picasso.with(context).load(photo_link).into(myViewHolder.ivPhoto);
 
             //İsme tıklanınca mesaj ekranı acılacak

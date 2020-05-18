@@ -2,5 +2,6 @@
     <string name="app_name">YeniApp</string>
     <string name="toggle_style"><b>Beğendin</b></string>
     <string name="fragment_message">Henüz mesajınız bulunmamakta. Yorumları beğenerek sohbeti başlatabilirsiniz.</string>
+    <string name="edit_string">Yarım cümleni paylaş ve \n gelen yorumları beğenerek sohbeti başlat..</string>
 
 </resources>

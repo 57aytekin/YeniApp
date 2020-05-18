@@ -75,7 +75,9 @@ public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.MyViewHo
             if(isChecked){
                 durum = 0;
                 myViewHolder.btnLike.setBackgroundResource(R.drawable.ic_favorite_orange);
+                System.out.println("COMMENT_ID => "+ comments.get(i).getId());
                 updateCommentLike(comments.get(i).getId(), 1);
+                System.out.println("POST_SaHİBİ ="+user_id+"COMMET_SAHİBİ=>"+comments.get(i).getUser_id()+"Comment ID=>"+comments.get(i).getId());
                 saveLikes(user_id, comments.get(i).getUser_id(), comments.get(i).getId());
                 pushNotification(post_username, comments.get(i).getName(), durum);
 

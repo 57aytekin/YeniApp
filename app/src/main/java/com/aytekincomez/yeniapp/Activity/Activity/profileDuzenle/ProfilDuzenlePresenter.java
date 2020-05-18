@@ -1,7 +1,6 @@
 package com.aytekincomez.yeniapp.Activity.Activity.profileDuzenle;
 
 import android.util.Log;
-import android.widget.Toast;
 
 import com.aytekincomez.yeniapp.Activity.Model.User;
 import com.aytekincomez.yeniapp.Activity.api.ApiClient;
@@ -17,7 +16,7 @@ public class ProfilDuzenlePresenter {
 
     private ProfilDuzenleView view;
 
-    ProfilDuzenlePresenter(ProfilDuzenleView view) {
+    public ProfilDuzenlePresenter(ProfilDuzenleView view) {
         this.view = view;
     }
 
@@ -53,7 +52,7 @@ public class ProfilDuzenlePresenter {
         });
     }
 
-    void get_image(int id){
+    public void get_image(int id){
         view.showLoading();
 
         ApiInterface apiInterface = ApiClient.getApiClient().create(ApiInterface.class);

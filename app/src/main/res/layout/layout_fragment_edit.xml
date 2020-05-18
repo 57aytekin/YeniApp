@@ -73,8 +73,9 @@
         android:gravity="start"
         android:textSize="16sp"
         android:background="@drawable/card_view_gorunum"
-        android:hint="Yarım cümleni paylaş ve gelen yorumları beğenerek sohbeti başlat.."
+        android:hint="@string/edit_string"
         android:padding="20dp"
         app:layout_constraintLeft_toLeftOf="@id/fragment_edit_photo"
-        app:layout_constraintTop_toBottomOf="@id/fragment_edit_photo" />
+        app:layout_constraintTop_toBottomOf="@id/fragment_edit_photo"
+        app:layout_constraintEnd_toEndOf="parent"/>
 </android.support.constraint.ConstraintLayout>

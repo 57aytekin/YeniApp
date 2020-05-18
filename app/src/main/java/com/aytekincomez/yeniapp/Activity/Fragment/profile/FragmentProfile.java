@@ -28,7 +28,7 @@ public class FragmentProfile extends Fragment implements FragmentProfileView {
 
     CircleImageView circleImageView;
     TextView tvUserName;
-    Button btnDüzenle;
+    Button btnDuzenle;
     TextView tvLogout, tvProfileBiografi;
     SessionManager sessionManager;
     private TabLayout tabLayout;
@@ -38,7 +38,6 @@ public class FragmentProfile extends Fragment implements FragmentProfileView {
     FragmentProfilePresenter presenter;
 
     HashMap<String, String> maps;
-
 
     @Nullable
     @Override
@@ -52,8 +51,7 @@ public class FragmentProfile extends Fragment implements FragmentProfileView {
         circleImageView = view.findViewById(R.id.ivProfilePhoto);
         tvUserName = view.findViewById(R.id.tvProfileUserName);
         tvProfileBiografi = view.findViewById(R.id.tvProfileBiografi);
-        btnDüzenle = view.findViewById(R.id.btnProfileDuzenle);
-
+        btnDuzenle = view.findViewById(R.id.btnProfileDuzenle);
 
         progressDialog = new ProgressDialog(getContext());
         progressDialog.setMessage("Lütfen bekleyiniz");
@@ -66,7 +64,7 @@ public class FragmentProfile extends Fragment implements FragmentProfileView {
 
 
 
-        btnDüzenle.setOnClickListener(v -> startActivity(new Intent(view.getContext(), ProfileDuzenleActivity.class)));
+        btnDuzenle.setOnClickListener(v -> startActivity(new Intent(view.getContext(), ProfileDuzenleActivity.class)));
 
         tabLayout.addTab(tabLayout.newTab().setText("Paylaşımlar"));
         tabLayout.addTab(tabLayout.newTab().setText("Yakında..."));
@@ -94,7 +92,6 @@ public class FragmentProfile extends Fragment implements FragmentProfileView {
 
                 }
                 fragmentGecis(R.id.frameLayout, fragment);
-
             }
 
             @Override
@@ -141,7 +138,7 @@ public class FragmentProfile extends Fragment implements FragmentProfileView {
         String name = map.get("Name");
         String path = map.get("Paths");
         String biyografi = map.get("Biyografi");
-        String imageUrl = "http://aytekincomez.webutu.com/yeni/"+path;
+        String imageUrl = "http://aytekincomezz.000webhostapp.com/YeniApp/"+path;
 
         maps = map;
 

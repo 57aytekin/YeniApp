@@ -2,6 +2,7 @@ package com.aytekincomez.yeniapp.Activity.api;
 
 import com.aytekincomez.yeniapp.Activity.Model.Comment;
 import com.aytekincomez.yeniapp.Activity.Model.Likes;
+import com.aytekincomez.yeniapp.Activity.Model.MessageList;
 import com.aytekincomez.yeniapp.Activity.Model.Post;
 import com.aytekincomez.yeniapp.Activity.Model.User;
 
@@ -118,4 +119,37 @@ public interface ApiInterface {
             @Field("durum") int durum
     );
 
+    @FormUrlEncoded
+    @POST("save_message_list.php")
+    Call<Void> saveMessageList(
+            @Field("gonderen_id") int gonderen_id,
+            @Field("alici_id") int alici_id,
+            @Field("alici_name") String alici_name,
+            @Field("alici_photo") String alici_photo,
+            @Field("message") String message
+    );
+
+
+    @GET("get_messagelist.php")
+    Call<List<MessageList>> getmessage_list();
+
+    @FormUrlEncoded
+    @POST("get_message.php")
+    Call<List<MessageList>> getMessage(
+            @Field("gonderen_id") int gonderen_id,
+            @Field("alici_id") int alici_id
+    );
+
+
+    @FormUrlEncoded
+    @POST("update_messagelist.php")
+    Call<MessageList> update_messageList(
+            @Field("id") int id,
+            @Field("message") String message
+    );
+    @FormUrlEncoded
+    @POST("delete_messagelist.php")
+    Call<Void> delete_messageList(
+            @Field("id") int id
+    );
 }

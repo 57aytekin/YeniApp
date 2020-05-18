@@ -14,7 +14,6 @@ import android.widget.TextView;
 import com.aytekincomez.yeniapp.Activity.Adapter.ChatAdapter;
 import com.aytekincomez.yeniapp.Activity.Manager.SessionManager;
 import com.aytekincomez.yeniapp.Activity.Model.Chat;
-import com.aytekincomez.yeniapp.Activity.Model.ChatList;
 import com.aytekincomez.yeniapp.R;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -29,10 +28,11 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
-public class MesajlasmaActivity extends AppCompatActivity implements View.OnClickListener {
+public class MesajlasmaActivity extends AppCompatActivity implements View.OnClickListener, MesajlasmaView {
     ImageView ivMesajlasmaBack;
     CircleImageView ivMesajlasmaPhoto;
     TextView tvUsername;
@@ -45,6 +45,8 @@ public class MesajlasmaActivity extends AppCompatActivity implements View.OnClic
 
     ChatAdapter chatAdapter;
     List<Chat> chats;
+    Map<String, String> pathMap;
+
 
     DatabaseReference reference;
 
@@ -60,23 +62,21 @@ public class MesajlasmaActivity extends AppCompatActivity implements View.OnClic
         String userid = map.get(sessionManager.USERID);
         String username = map.get(sessionManager.NAME);
 
+
         String name = getIntent().getStringExtra("post_paylasan");
         String photo = getIntent().getStringExtra("photo");
-        String messagePhoto ="http://aytekincomez.webutu.com/yeni/image/"+username+".jpg";
         String post_paylasan_id = getIntent().getStringExtra("post_sahibi_id");
 
         //Anlık zamanı alıp veritabanına gönderiyoruz
         SimpleDateFormat bicim = new SimpleDateFormat("dd.M.yyyy HH:mm:ss", Locale.US);
         String currentDateandTime = bicim.format(new Date());
 
-        int alici_id = Integer.parseInt(userid);
-        int gonderen_id = Integer.parseInt(post_paylasan_id);
-
         btnMesaj.setOnClickListener(v -> {
             if(!etMesaj.equals("")){
-                sendMessage(userid, post_paylasan_id, username, etMesaj.getText().toString(), messagePhoto,""+currentDateandTime);
+                sendMessage(userid, post_paylasan_id, username, etMesaj.getText().toString(), photo,""+currentDateandTime);
                 durum = 2;
                 presenter.pushNofication(name, etMesaj.getText().toString(), durum);
+                presenter.getMessage(Integer.parseInt(userid),Integer.parseInt(post_paylasan_id), name, photo,etMesaj.getText().toString());
             }else{
                 etMesaj.setError("Herhangi bir mesaj girmediniz");
             }
@@ -107,13 +107,14 @@ public class MesajlasmaActivity extends AppCompatActivity implements View.OnClic
         tvUsername = findViewById(R.id.tvMesajlasmaUsername);
         etMesaj = findViewById(R.id.etMesaj);
         btnMesaj = findViewById(R.id.btnMesajlasma);
-        presenter = new MesajlasmaPresenter();
+        presenter = new MesajlasmaPresenter(this);
         durum = -1;
         //recylerView
         recyclerView = findViewById(R.id.recyclerMesajlasma);
         recyclerView.setHasFixedSize(true);
         LinearLayoutManager layoutManager = new LinearLayoutManager(getApplicationContext());
         recyclerView.setLayoutManager(layoutManager);
+
 
     }
 
@@ -138,37 +139,6 @@ public class MesajlasmaActivity extends AppCompatActivity implements View.OnClic
         map.put("tarih",tarih);
 
         references.child("Chats").push().setValue(map);
-
-        DatabaseReference mRef = FirebaseDatabase.getInstance().getReference();
-        HashMap<String, String> mMap = new HashMap<>();
-        mMap.put("gondere",gonderen);
-        mMap.put("alici", alici);
-        mMap.put("aliciName", aliciName);
-        mMap.put("message",message);
-        mMap.put("photo",photo);
-        mRef.child("ChatList").push().setValue(mMap);
-
-
-        reference = FirebaseDatabase.getInstance().getReference("ChatList");
-        reference.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                for (DataSnapshot snapshot : dataSnapshot.getChildren()){
-                    ChatList chatList = snapshot.getValue(ChatList.class);
-                    if (gonderen.equals(chatList.getGonderen()) && alici.equals(chatList.getAlici())){
-                        //Update et
-                    }else{
-
-                    }
-                }
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
-
-            }
-        });
-
     }
 
     private void readMessage(String gondere, String alici){
@@ -197,5 +167,21 @@ public class MesajlasmaActivity extends AppCompatActivity implements View.OnClic
             }
         });
     }
+
+    @Override
+    public void showProgress() {
+
+    }
+
+    @Override
+    public void hideProgress() {
+
+    }
+
+    @Override
+    public void onGetResult(Map<String, String> map) {
+        pathMap = map;
+    }
+
 
 }

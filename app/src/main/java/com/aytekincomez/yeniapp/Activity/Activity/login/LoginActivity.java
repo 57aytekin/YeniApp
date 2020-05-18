@@ -35,7 +35,7 @@ public class LoginActivity extends AppCompatActivity{
     TextView tvRegister;
     ImageView ivFace, ivGoogle;
     ProgressBar loading;
-    private static String Login_URL = "http://aytekincomez.webutu.com/yeni/login.php";
+    private static String Login_URL = "https://aytekincomezz.000webhostapp.com/YeniApp/login.php";
     SessionManager sessionManager;
     LoginPresenter presenter;
 

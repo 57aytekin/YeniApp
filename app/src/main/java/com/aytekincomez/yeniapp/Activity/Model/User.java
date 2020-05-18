@@ -13,6 +13,11 @@ public class User {
     @SerializedName("name")
     private String name;
 
+    public User(String name, String paths) {
+        this.name = name;
+        this.paths = paths;
+    }
+
     @Expose
     @SerializedName("email")
     private String email;
@@ -24,22 +29,6 @@ public class User {
     @Expose
     @SerializedName("token")
     private String token;
-
-    public String getToken() {
-        return token;
-    }
-
-    public void setToken(String token) {
-        this.token = token;
-    }
-
-    public String getBiyografi() {
-        return biyografi;
-    }
-
-    public void setBiyografi(String biyografi) {
-        this.biyografi = biyografi;
-    }
 
     @Expose
     @SerializedName("image")
@@ -65,6 +54,22 @@ public class User {
     @SerializedName("success") private boolean success;
     @Expose
     @SerializedName("message") private String message;
+
+    public String getToken() {
+        return token;
+    }
+
+    public void setToken(String token) {
+        this.token = token;
+    }
+
+    public String getBiyografi() {
+        return biyografi;
+    }
+
+    public void setBiyografi(String biyografi) {
+        this.biyografi = biyografi;
+    }
 
 
     public boolean isSuccess() {

@@ -8,7 +8,6 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,7 +15,6 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
@@ -27,7 +25,6 @@ import com.aytekincomez.yeniapp.Activity.Fragment.home.FragmentHome;
 import com.aytekincomez.yeniapp.Activity.Fragment.profile.FragmentProfilePresenter;
 import com.aytekincomez.yeniapp.Activity.Fragment.profile.FragmentProfileView;
 import com.aytekincomez.yeniapp.Activity.Manager.SessionManager;
-import com.aytekincomez.yeniapp.Activity.Model.Post;
 import com.aytekincomez.yeniapp.R;
 import com.squareup.picasso.Picasso;
 
@@ -47,7 +44,7 @@ public class FragmentEdit extends Fragment implements FragmentProfileView {
     SessionManager sessionManager;
     FragmentProfilePresenter presenter;
     ProgressDialog progressDialog;
-    public static final String URL_POST = "http://aytekincomez.webutu.com/yeni/sharepost.php";
+    public static final String URL_POST = "http://aytekincomezz.000webhostapp.com/YeniApp/sharepost.php";
 
     @Nullable
     @Override
@@ -147,7 +144,7 @@ public class FragmentEdit extends Fragment implements FragmentProfileView {
     public void onGetResult(HashMap<String, String> map) {
         String name = map.get("Name");
         String path = map.get("Paths");
-        String imageUrl = "http://aytekincomez.webutu.com/yeni/"+path;
+        String imageUrl = "http://aytekincomezz.000webhostapp.com/YeniApp/"+path;
 
         username.setText(name);
         Picasso.with(getContext()).load(imageUrl).into(ivPhoto);    }
